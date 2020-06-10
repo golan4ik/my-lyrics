@@ -1,7 +1,7 @@
 import axios from "axios";
 import { parseSearchResponse } from "./parsers";
 
-const SEARCH_URL = "http://api.genius.com/search";
+const SEARCH_URL = "http://api.genius.com/searchdd";
 
 export const searchLyrics = (term) => {
   return axios
@@ -11,9 +11,14 @@ export const searchLyrics = (term) => {
       },
     })
     .then((res) => {
-      return parseSearchResponse(res.data);
+      return { results: parseSearchResponse(res.data) };
     })
     .catch((e) => {
-      console.error(e);
+      return {
+        error: {
+          message: e.message,
+          status: e.response.status,
+        },
+      };
     });
 };

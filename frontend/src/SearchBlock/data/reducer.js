@@ -11,11 +11,15 @@ export const NAME = "SEARCH";
 
 export default (state = defaultState, action) => {
   switch (action.type) {
+    case actions.UPDATE_SEARCH_TERM:
+      return {
+        ...state,
+        term: action.term,
+      };
     case actions.SEARCH_START:
       return {
         ...state,
         isInprocess: true,
-        term: action.term,
         results: [],
         error: null,
       };

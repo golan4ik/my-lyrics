@@ -1,6 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { makeStyles, Grid, TextField } from "@material-ui/core";
-import { searchLyrics } from "../utils/networking";
+import { connect } from "react-redux";
+import {
+  getTerm,
+  getIsInProcess,
+  getError,
+} from "./data/selectors";
+import { updateTerm, searchStart } from "./data/actions";
 
 const styles = makeStyles((theme) => {
   return {
@@ -13,10 +19,9 @@ const styles = makeStyles((theme) => {
 const SearchBlock = (props) => {
   const classes = styles();
   const onKeyUp = (e) => {
+    props.updateTerm(e.target.value);
     if (e.keyCode === 13) {
-      searchLyrics(e.target.value).then((results) => {
-        console.log(results);
-      });
+      props.searchStart();
     }
   };
 
@@ -29,10 +34,26 @@ const SearchBlock = (props) => {
           size="small"
           onKeyUp={onKeyUp}
           focus="true"
+          disabled={props.inProcess}
         />
       </Grid>
     </Grid>
   );
 };
 
-export default SearchBlock;
+const mapStateToProps = (state) => {
+  return {
+    term: getTerm(state),
+    inProcess: getIsInProcess(state),
+    error: getError(state)
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateTerm: (term) => dispatch(updateTerm(term)),
+    searchStart: () => dispatch(searchStart()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchBlock);
