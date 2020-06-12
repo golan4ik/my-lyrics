@@ -1,7 +1,7 @@
 import axios from "axios";
 import { parseSearchResponse } from "./parsers";
 
-const SEARCH_URL = "http://api.genius.com/searchdd";
+const SEARCH_URL = "http://api.genius.com/search";
 
 export const searchLyrics = (term) => {
   return axios
