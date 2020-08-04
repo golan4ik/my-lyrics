@@ -8,6 +8,8 @@ import { MuiThemeProvider, Grid } from "@material-ui/core";
 import Navbar from "./Navbar/Navbar";
 import Content from "./Content/Content";
 
+import 'react-perfect-scrollbar/dist/css/styles.css';
+
 axiosConfig();
 const store = configureStore();
 

@@ -12,6 +12,11 @@ export const NAME = "SEARCH";
 
 export default (state = defaultState, action) => {
   switch (action.type) {
+    case actions.SET_SEARCH_PROCESS:
+      return {
+        ...state,
+        isInprocess: action.value,
+      };
     case actions.INCREMENT_PAGE:
       return {
         ...state,
@@ -21,7 +26,7 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         term: action.term,
-        page: 1
+        page: 1,
       };
     case actions.SEARCH_START:
       return {
@@ -33,10 +38,7 @@ export default (state = defaultState, action) => {
     case actions.SEARCH_SUCCESS:
       return {
         ...state,
-        results: [
-          ...state.results,
-          ...action.results
-        ],
+        results: [...state.results, ...action.results],
         error: null,
         isInprocess: false,
       };
