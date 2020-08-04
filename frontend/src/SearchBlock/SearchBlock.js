@@ -1,11 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles, Grid, TextField } from "@material-ui/core";
 import { connect } from "react-redux";
-import {
-  getTerm,
-  getIsInProcess,
-  getError,
-} from "./data/selectors";
+import { getTerm, getIsInProcess, getError } from "./data/selectors";
 import { updateTerm, searchStart } from "./data/actions";
 
 const styles = makeStyles((theme) => {
@@ -17,13 +13,23 @@ const styles = makeStyles((theme) => {
 });
 
 const SearchBlock = (props) => {
+  const { term, inProcess, searchStart, updateTerm } = props;
   const classes = styles();
+
+  const onChange = (e) => {
+    updateTerm(e.target.value);
+  };
+
   const onKeyUp = (e) => {
-    props.updateTerm(e.target.value);
     if (e.keyCode === 13) {
-      props.searchStart();
+      searchStart();
     }
   };
+
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    searchStart();
+  }, []);
 
   return (
     <Grid container>
@@ -33,8 +39,10 @@ const SearchBlock = (props) => {
           variant="outlined"
           size="small"
           onKeyUp={onKeyUp}
+          onChange={onChange}
+          value={term}
           focus="true"
-          disabled={props.inProcess}
+          disabled={inProcess}
         />
       </Grid>
     </Grid>
@@ -45,7 +53,7 @@ const mapStateToProps = (state) => {
   return {
     term: getTerm(state),
     inProcess: getIsInProcess(state),
-    error: getError(state)
+    error: getError(state),
   };
 };
 

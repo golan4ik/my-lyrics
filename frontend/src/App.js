@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => {
     fullHeight: {
       height: "100%",
     },
+    appbarOffset: theme.mixins.toolbar,
   };
 });
 
@@ -34,6 +35,8 @@ function App() {
   return (
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
+        <Navbar />
+        <div className={classes.appbarOffset} />
         <Grid
           container
           sx={12}
@@ -41,7 +44,6 @@ function App() {
           className={classes.fullHeight}
         >
           <Grid container item sx={12} direction="column">
-            <Navbar />
             <Content />
           </Grid>
         </Grid>

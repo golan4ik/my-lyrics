@@ -1,17 +1,21 @@
 import axios from "axios";
 import { parseSearchResponse } from "./parsers";
 
-const SEARCH_URL = "http://api.genius.com/search";
+const SEARCH_URL =
+  "http://localhost:5001/my-lyrics-83a85/us-central1/api/search";
+const MAX_PER_PAGE = 20;
 
-export const searchLyrics = (term) => {
+export const searchLyrics = (q, page = 1) => {
   return axios
     .get(SEARCH_URL, {
       params: {
-        q: term,
+        q,
+        per_page: MAX_PER_PAGE, // https://genius.com/discussions/267781-Search-api-results
+        page
       },
     })
     .then((res) => {
-      return { results: parseSearchResponse(res.data) };
+      return { results: res.data };
     })
     .catch((e) => {
       return {
