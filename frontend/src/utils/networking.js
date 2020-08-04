@@ -1,5 +1,4 @@
 import axios from "axios";
-import { parseSearchResponse } from "./parsers";
 
 const SEARCH_URL =
   "http://localhost:5001/my-lyrics-83a85/us-central1/api/search";

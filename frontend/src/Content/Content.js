@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Grid, makeStyles } from "@material-ui/core";
 import SearchBlock from "../SearchBlock/SearchBlock";
 import SearchResults from "../SearchResults/SearchResults";
