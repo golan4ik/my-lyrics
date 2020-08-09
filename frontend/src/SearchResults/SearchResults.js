@@ -1,44 +1,27 @@
 import React from "react";
 import { connect } from "react-redux";
-import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import { getResults, getIsInProcess } from "../SearchBlock/data/selectors";
 import ResultCard from "./ResultCard";
 import { Divider, Grid, Button } from "@material-ui/core";
-import PerfectScrollbar from "react-perfect-scrollbar";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { loadMore } from "../SearchBlock/data/actions";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-    maxWidth: "36ch",
-    maxHeight: "400px",
-    overflow: "auto",
-    backgroundColor: theme.palette.background.paper,
-    position: "relative",
-  },
-  overlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(100,100,100,0.2)",
-    zIndex: 100,
-  },
-}));
+import { searchResultsStyles } from "./styles";
 
 const SearchResults = (props) => {
+  const classes = searchResultsStyles();
   const { results, loadMore, isInProcess } = props;
-  const classes = useStyles();
 
-  console.log(results);
+  //console.log(results);
 
   return (
     <Grid justify="center" container item xs={12}>
       <List className={classes.root}>
         {isInProcess && results.length > 0 && (
-          <div className={classes.overlay}></div>
+          <Backdrop className={classes.overlay} open={true}>
+            <CircularProgress color="inherit" />
+          </Backdrop>
         )}
         {results.map((result) => (
           <React.Fragment key={result.id}>
@@ -50,6 +33,7 @@ const SearchResults = (props) => {
       {results.length > 0 && (
         <Grid justify="center" container item xs={12}>
           <Button
+            className={classes.moreButton}
             variant="contained"
             color="primary"
             onClick={loadMore}

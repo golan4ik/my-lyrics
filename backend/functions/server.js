@@ -2,9 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { ACCESS_TOKEN } = require("./constants");
-const app = express();
-
 const { handleSearch } = require("./routes/index");
+
+
+const app = express();
 
 app
   .use(cors({ origin: true }))

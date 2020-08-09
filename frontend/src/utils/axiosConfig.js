@@ -1,13 +1,12 @@
 import axios from "axios";
-import { GENIUS_API_ACCESS_TOKEN } from "../constants";
+import { GENIUS_API_ACCESS_TOKEN, BASE_API_URL } from "../constants";
+
+axios.defaults.baseURL = BASE_API_URL;
 
 export default () => {
   axios.interceptors.request.use(
     function (config) {
-      config.params = {
-        ...config.params,
-        access_token: GENIUS_API_ACCESS_TOKEN,
-      };
+      config.params.access_token = GENIUS_API_ACCESS_TOKEN;
       return config;
     },
     function (error) {

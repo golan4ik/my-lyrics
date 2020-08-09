@@ -1,22 +1,17 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import StarBorder from "@material-ui/icons/StarBorder";
+import Star from '@material-ui/icons/Star';
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
-
-const useStyles = makeStyles((theme) => ({
-  inline: {
-    display: "inline",
-  },
-  avatar: {
-    borderRadius: 0,
-  },
-}));
+import { IconButton } from "@material-ui/core";
+import { resultCardStyles } from "./styles";
 
 const ResultCard = (props) => {
-  const classes = useStyles();
+  const classes = resultCardStyles();
   const {
     primary_artist: { image_url, name },
     full_title,
@@ -44,6 +39,12 @@ const ResultCard = (props) => {
           </React.Fragment>
         }
       />
+      <ListItemIcon>
+        <IconButton>
+          <StarBorder className={classes.favoriteIcon} />
+          <Star className={classes.favoriteIconSelected} />
+        </IconButton>
+      </ListItemIcon>
     </ListItem>
   );
 };

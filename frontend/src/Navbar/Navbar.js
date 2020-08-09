@@ -5,7 +5,9 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
+import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 import MenuIcon from "@material-ui/icons/Menu";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,6 +15,15 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
+  },
+  logoutButton: {
+    color: theme.palette.error.main,
+    marginLeft: theme.spacing(1),
+    lol: () => console.log(theme),
+  },
+  userAvatar: {
+    backgroundColor: theme.palette.primary.light,
+    color: theme.palette.primary.contrastText,
   },
   title: {
     flexGrow: 1,
@@ -39,7 +50,16 @@ const Navbar = (props) => {
           </Typography>
           <Button color="inherit">Login</Button>
           <Button color="inherit">Sign Up</Button>
-          <Button color="inherit">Logout</Button>
+          <Avatar className={classes.userAvatar}>
+            {props.userName || "U"}
+          </Avatar>
+          <IconButton
+            className={classes.logoutButton}
+            size="small"
+            aria-label="Logout"
+          >
+            <PowerSettingsNewIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
     </div>
