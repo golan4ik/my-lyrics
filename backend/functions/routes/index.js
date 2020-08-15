@@ -18,3 +18,10 @@ exports.handleSearch = (req, res) => {
       res.status(500).json({ error: e.message });
     });
 };
+
+exports.handleSignIn = (req, res) => {
+  res.status(200).json(req.body);
+}
+exports.handleSignUp = (req, res) => {
+  res.status(200).json(req.body);
+}

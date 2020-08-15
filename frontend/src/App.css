@@ -8,5 +8,6 @@ body,
 }
 
 #root{
-  height: auto;
+  display: flex;
+  flex-direction: column;
 }

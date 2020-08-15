@@ -25,7 +25,7 @@ const SearchResults = (props) => {
         )}
         {results.map((result) => (
           <React.Fragment key={result.id}>
-            <ResultCard {...result} />
+            <ResultCard {...result} showStars={false} />
             <Divider variant="inset" component="li" />
           </React.Fragment>
         ))}

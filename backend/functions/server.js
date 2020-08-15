@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { ACCESS_TOKEN } = require("./constants");
-const { handleSearch } = require("./routes/index");
+const { handleSearch, handleSignIn, handleSignUp } = require("./routes/index");
 
 
 const app = express();
@@ -19,5 +19,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/search", handleSearch);
+app.post("/signin", handleSignIn);
+app.post("/signup", handleSignUp);
 
 module.exports = app;

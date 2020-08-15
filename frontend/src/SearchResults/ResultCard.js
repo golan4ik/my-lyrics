@@ -13,6 +13,7 @@ import { resultCardStyles } from "./styles";
 const ResultCard = (props) => {
   const classes = resultCardStyles();
   const {
+    showStars,
     primary_artist: { image_url, name },
     full_title,
   } = props;
@@ -39,12 +40,12 @@ const ResultCard = (props) => {
           </React.Fragment>
         }
       />
-      <ListItemIcon>
+      {showStars && <ListItemIcon>
         <IconButton>
           <StarBorder className={classes.favoriteIcon} />
           <Star className={classes.favoriteIconSelected} />
         </IconButton>
-      </ListItemIcon>
+      </ListItemIcon>}
     </ListItem>
   );
 };

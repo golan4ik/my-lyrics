@@ -6,7 +6,8 @@ axios.defaults.baseURL = BASE_API_URL;
 export default () => {
   axios.interceptors.request.use(
     function (config) {
-      config.params.access_token = GENIUS_API_ACCESS_TOKEN;
+      if (config.method === "get")
+        config.params.access_token = GENIUS_API_ACCESS_TOKEN;
       return config;
     },
     function (error) {
