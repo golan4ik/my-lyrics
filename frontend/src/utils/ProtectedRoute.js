@@ -1,15 +1,22 @@
 import React from "react";
-import { useIsAuthenticated } from "./networking";
 import { Route, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { getUser } from "../data/auth.selectors";
 
-export default ({ component: Component, ...props }) => {
-  const [isAuthenticated] = useIsAuthenticated();
-
-  console.log(isAuthenticated);
-
-  return (isAuthenticated ? (
-    <Route component={Component} {...props} />
-  ) : (
-    <Redirect to="/signin" />
-  ));
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: getUser(state),
+  };
 };
+
+export default connect(mapStateToProps)(
+  ({ component: Component, isAuthenticated, ...props }) => {
+    console.log(isAuthenticated);
+
+    return isAuthenticated ? (
+      <Route component={Component} {...props} />
+    ) : (
+      <Redirect to="/signin" />
+    );
+  }
+);

@@ -36,9 +36,8 @@ const useStyles = makeStyles((theme) => ({
 const SignIn = ({ error, loading, signIn }) => {
   const classes = useStyles();
   const [fields, updateFIeld] = useForm({
-    userName: "",
     email: "",
-    password: ""
+    password: "",
   });
 
   const onSubmit = () => {
@@ -51,10 +50,9 @@ const SignIn = ({ error, loading, signIn }) => {
 
   const canSubmit = () => {
     let result = true;
-    const { userName, password, password2, email } = fields;
+    const { password, email } = fields;
 
-    result = password.length > 5 && password2 === password;
-    result = result && userName.length > 0;
+    result = password.length > 5;
     result = result && EmailValidator.validate(email);
 
     return result;
@@ -74,14 +72,6 @@ const SignIn = ({ error, loading, signIn }) => {
           Sign In
         </Typography>
         <Grid container item xs={12} justify="center">
-          <AuthFormControl
-            id="userName"
-            label="User Name"
-            error={error}
-            value={fields.userName}
-            onChange={updateFIeld}
-            disabled={loading}
-          />
           <AuthFormControl
             id="email"
             label="Email"

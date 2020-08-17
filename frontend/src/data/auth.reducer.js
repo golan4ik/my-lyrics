@@ -8,7 +8,7 @@ import {
 } from "./auth.actions";
 
 const initialState = {
-  user: getSavedUserData(),
+  user: getSavedUserData().userName,
   loading: false,
   error: null,
 };
@@ -21,7 +21,7 @@ export default (state = initialState, action) => {
       return {
         loading: false,
         error: null,
-        user: action.user ? { ...action.user } : null,
+        user: action.user ? action.user : null,
       };
 
     case ON_SIGNIN_START:

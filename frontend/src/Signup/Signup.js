@@ -72,7 +72,7 @@ const SignUp = ({ error, loading, signIn }) => {
     >
       <Grid container item xs={12} md={4} lg={2} className={classes.content}>
         <Typography component="h3" variant="h5" className={classes.title}>
-          Sign In
+          Sign Up
         </Typography>
         <Grid container item xs={12} justify="center">
           <AuthFormControl

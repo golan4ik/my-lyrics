@@ -4,7 +4,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import StarBorder from "@material-ui/icons/StarBorder";
-import Star from '@material-ui/icons/Star';
+import Star from "@material-ui/icons/Star";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import { IconButton } from "@material-ui/core";
@@ -13,7 +13,6 @@ import { resultCardStyles } from "./styles";
 const ResultCard = (props) => {
   const classes = resultCardStyles();
   const {
-    showStars,
     primary_artist: { image_url, name },
     full_title,
   } = props;
@@ -40,12 +39,12 @@ const ResultCard = (props) => {
           </React.Fragment>
         }
       />
-      {showStars && <ListItemIcon>
+      <ListItemIcon>
         <IconButton>
           <StarBorder className={classes.favoriteIcon} />
           <Star className={classes.favoriteIconSelected} />
         </IconButton>
-      </ListItemIcon>}
+      </ListItemIcon>
     </ListItem>
   );
 };

@@ -1,22 +1,23 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import jwt_decode from "jwt-decode";
 
 const SEARCH_URL = `/search`;
 const SIGNIN_URL = "/signin";
 const MAX_PER_PAGE = 20;
 
 export const getSavedUserData = () => {
-  const token = localStorage.getItem("TOKEN");
+  const userItem = localStorage.getItem("user");
   let user = null;
 
   try {
-    user = jwt_decode(token);
-  } catch (e) {}
+    user = JSON.parse(userItem);
 
-  console.log(user);
+    console.log(user);
 
-  return user;
+    return user;
+  } catch (e) {
+    return {};
+  }
 };
 
 export const useIsAuthenticated = () => {
@@ -53,10 +54,11 @@ export const searchLyrics = (q, page = 1) => {
     });
 };
 
-export const signIn = (credentials) => {
+export const signIn = ({ email, password }) => {
   return axios
     .post(SIGNIN_URL, {
-      credentials,
+      email,
+      password,
     })
     .then((res) => {
       return res.data;

@@ -11,7 +11,6 @@ import SignIn from "./SignIn/SignIn";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import "./App.css";
-import { useIsAuthenticated } from "./utils/networking";
 import Signup from "./Signup/Signup";
 
 axiosConfig();
@@ -37,7 +36,6 @@ const useStyles = makeStyles((theme) => {
 
 function App() {
   const classes = useStyles();
-  const [isAuthenticated] = useIsAuthenticated();
 
   return (
     <Router>

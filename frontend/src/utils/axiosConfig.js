@@ -1,5 +1,6 @@
 import axios from "axios";
-import { GENIUS_API_ACCESS_TOKEN, BASE_API_URL } from "../constants";
+import { BASE_API_URL } from "../constants";
+import { getSavedUserData } from "./networking";
 
 axios.defaults.baseURL = BASE_API_URL;
 
@@ -7,7 +8,7 @@ export default () => {
   axios.interceptors.request.use(
     function (config) {
       if (config.method === "get")
-        config.params.access_token = GENIUS_API_ACCESS_TOKEN;
+        config.headers.authorization = `Bearer ${getSavedUserData().token}`;
       return config;
     },
     function (error) {

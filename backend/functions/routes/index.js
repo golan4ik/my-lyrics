@@ -1,13 +1,17 @@
 const axios = require("axios");
-const { GENIUS_API_SEARCH_URL } = require("../constants");
+const admin = require("firebase-admin");
+const firebase = require("firebase");
+const { GENIUS_API_SEARCH_URL, ERROR_MESSAGES } = require("../constants");
 const { parseSearchResponse } = require("../utils");
+
+const db = admin.firestore();
 
 exports.handleSearch = (req, res) => {
   console.log(req.query);
   axios
     .get(GENIUS_API_SEARCH_URL, {
       params: {
-        ...req.query
+        ...req.query,
       },
     })
     .then((response) => {
@@ -20,8 +24,66 @@ exports.handleSearch = (req, res) => {
 };
 
 exports.handleSignIn = (req, res) => {
-  res.status(200).json(req.body);
-}
+  const { email, password } = req.body;
+  let user = null,
+    userName = null;
+
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((data) => {
+      user = data.user;
+
+      return db.collection('/users').doc(user.email).get();
+    })
+    .then((dbUser) => {
+      userName = dbUser.data().name;
+      return user.getIdToken();
+    })
+    .then((token) => {
+      res.status(200).json({ token, userName });
+    })
+    .catch((e) => {
+      console.log(e.message);
+      res.status(400).json({ message: e.message });
+    });
+};
+
 exports.handleSignUp = (req, res) => {
-  res.status(200).json(req.body);
-}
+  const { email, password, userName } = req.body;
+  console.log("signin up");
+
+  let user = null;
+
+  firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then((data) => {
+      user = data.user;
+
+      const newUserCredentials = {
+        email: user.email,
+        id: user.uid,
+        name: userName,
+      };
+
+      return db
+        .doc(`/users/${newUserCredentials.email}`)
+        .set(newUserCredentials);
+    })
+    .then(() => {
+      return user.getIdToken();
+    })
+    .then((token) => {
+      res.status(200).json({ token });
+    })
+    .catch((e) => {
+      console.log(e.code);
+      res.status(400).json({
+        message:
+          e.code === "auth/email-already-in-use"
+            ? e.message
+            : ERROR_MESSAGES.INCORRECT_CREDENTIALS,
+      });
+    });
+};
