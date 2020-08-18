@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -6,13 +6,13 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
-import MenuIcon from "@material-ui/icons/Menu";
 import Avatar from "@material-ui/core/Avatar";
 import { withRouter } from "react-router-dom";
-import { useIsAuthenticated } from "../utils/networking";
 import { getUser, getIsLoading } from "../data/auth.selectors";
 import { connect } from "react-redux";
 import { Tooltip, Grid } from "@material-ui/core";
+import { setUser } from "../data/auth.actions";
+import { usePrevious } from "../common/hooks";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,27 +42,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Navbar = ({ history, location, user, authInProcess }) => {
+const Navbar = ({ history, location, user, authInProcess, signOut }) => {
   const classes = useStyles();
   const isAuthenticated = !!user;
 
-  const showSignIn = location.pathname !== "/signin" && !authInProcess;
-  const showSignUp = location.pathname !== "/signup" && !authInProcess;
+  const showSignIn = location.pathname === "/signup" && !authInProcess;
+  const showSignUp = location.pathname === "/signin" && !authInProcess;
+
+  const prevUser = usePrevious(user);
+
+  useEffect(() => {
+    if (prevUser !== null && user === null) {
+      history.push("/signin");
+    }
+  }, [user, prevUser]);
 
   return (
     <div className={classes.root}>
       <AppBar position="fixed">
         <Toolbar className={classes.toolbar}>
-          {/* {isAuthenticated && (
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="menu"
-            >
-              <MenuIcon />
-            </IconButton>
-          )} */}
           <Typography
             variant="h6"
             className={classes.title}
@@ -93,7 +91,7 @@ const Navbar = ({ history, location, user, authInProcess }) => {
                 )}
               </>
             )}
-            {isAuthenticated && (
+            {isAuthenticated && !(showSignIn || showSignUp) && (
               <>
                 <Tooltip title={"My favorites"} aria-label="My favorites">
                   <Avatar
@@ -107,6 +105,7 @@ const Navbar = ({ history, location, user, authInProcess }) => {
                   className={classes.logoutButton}
                   size="small"
                   aria-label="Logout"
+                  onClick={signOut}
                 >
                   <PowerSettingsNewIcon />
                 </IconButton>
@@ -126,4 +125,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(Navbar));
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signOut: () => dispatch(setUser(null)),
+  };
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Navbar));

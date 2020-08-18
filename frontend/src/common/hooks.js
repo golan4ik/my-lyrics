@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export const useForm = (defaultFields = {}) => {
   const [fields, updateFields] = useState(defaultFields);
@@ -12,3 +12,13 @@ export const useForm = (defaultFields = {}) => {
 
   return [fields, updateField];
 };
+
+export const usePrevious = (value) => {
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current = value;
+  });
+
+  return ref.current;
+}

@@ -9,6 +9,7 @@ import {
 } from "./actions";
 import { getTerm, getPage } from "./selectors";
 import { searchLyrics } from "../../utils/networking";
+import { setUser } from "../../data/auth.actions";
 
 function* loadMore() {
   yield put(incrementPage());
@@ -25,6 +26,8 @@ function* onSearchStart() {
     if (!error) {
       yield put(searchSuccess(results));
     } else {
+      localStorage.removeItem('user');
+      yield put(setUser(null));
       yield put(searchError(error));
     }
   } catch (e) {}

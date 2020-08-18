@@ -14,7 +14,7 @@ export const getSavedUserData = () => {
 
     console.log(user);
 
-    return user;
+    return user || {};
   } catch (e) {
     return {};
   }
@@ -42,6 +42,8 @@ export const searchLyrics = (q, page = 1) => {
       },
     })
     .then((res) => {
+      if (res.status === 401) return { error: res.data, status: res.status };
+
       return { results: res.data };
     })
     .catch((e) => {

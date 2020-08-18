@@ -7,44 +7,72 @@ import StarBorder from "@material-ui/icons/StarBorder";
 import Star from "@material-ui/icons/Star";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
-import { IconButton } from "@material-ui/core";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import { IconButton, AccordionSummary } from "@material-ui/core";
 import { resultCardStyles } from "./styles";
+import { useState } from "react";
 
 const ResultCard = (props) => {
   const classes = resultCardStyles();
   const {
     primary_artist: { image_url, name },
     full_title,
+    favorite,
+    lyrics,
   } = props;
 
-  //console.log(props);
+  const [showLyrics, setShowLyrics] = useState(false);
+
+  const getLyrics = () => {
+    setShowLyrics(!showLyrics);
+  };
+
+  console.log(showLyrics);
 
   return (
-    <ListItem alignItems="flex-start">
-      <ListItemAvatar>
-        <Avatar className={classes.avatar} alt={full_title} src={image_url} />
-      </ListItemAvatar>
-      <ListItemText
-        primary={full_title}
-        secondary={
-          <React.Fragment>
-            <Typography
-              component="span"
-              variant="body2"
-              className={classes.inline}
-              color="textPrimary"
-            >
-              {name}
-            </Typography>
-          </React.Fragment>
-        }
-      />
+    <ListItem alignItems="flex-start" className={classes.listItem}>
+      <div className={classes.dataBlock} onClick={getLyrics}>
+        <ListItemAvatar>
+          <Avatar className={classes.avatar} alt={full_title} src={image_url} />
+        </ListItemAvatar>
+        <ListItemText
+          primary={full_title}
+          secondary={
+            <React.Fragment>
+              <Typography
+                component="span"
+                variant="body2"
+                className={classes.inline}
+                color="textPrimary"
+              >
+                {name}
+              </Typography>
+            </React.Fragment>
+          }
+        />
+      </div>
       <ListItemIcon>
         <IconButton>
-          <StarBorder className={classes.favoriteIcon} />
-          <Star className={classes.favoriteIconSelected} />
+          {!favorite ? (
+            <StarBorder className={classes.favoriteIcon} />
+          ) : (
+            <Star className={classes.favoriteIconSelected} />
+          )}
         </IconButton>
       </ListItemIcon>
+      <Accordion expanded={showLyrics} onChange={getLyrics}>
+        <AccordionSummary
+          className={classes.accordionSummary}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
+        ></AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            {lyrics}
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
     </ListItem>
   );
 };

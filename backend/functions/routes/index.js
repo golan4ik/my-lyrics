@@ -34,7 +34,7 @@ exports.handleSignIn = (req, res) => {
     .then((data) => {
       user = data.user;
 
-      return db.collection('/users').doc(user.email).get();
+      return db.collection("/users").doc(user.uid).get();
     })
     .then((dbUser) => {
       userName = dbUser.data().name;
@@ -67,9 +67,7 @@ exports.handleSignUp = (req, res) => {
         name: userName,
       };
 
-      return db
-        .doc(`/users/${newUserCredentials.email}`)
-        .set(newUserCredentials);
+      return db.doc(`/users/${newUserCredentials.id}`).set(newUserCredentials);
     })
     .then(() => {
       return user.getIdToken();

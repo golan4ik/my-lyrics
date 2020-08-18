@@ -13,11 +13,14 @@ const initialState = {
   error: null,
 };
 
-export const NAME = 'AUTH';
+export const NAME = "AUTH";
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case SET_USER:
+      if (!action.user) {
+        localStorage.removeItem("user");
+      }
       return {
         loading: false,
         error: null,

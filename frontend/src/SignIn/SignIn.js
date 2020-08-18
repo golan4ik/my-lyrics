@@ -2,20 +2,16 @@ import React from "react";
 import {
   Grid,
   makeStyles,
-  Paper,
-  FormControl,
   Typography,
-  InputLabel,
-  Input,
-  FormHelperText,
   Button,
 } from "@material-ui/core";
 import EmailValidator from "email-validator";
 import AuthFormControl from "../common/AuthFormControl";
-import { useForm } from "../common/hooks";
+import { useForm, usePrevious } from "../common/hooks";
 import { getIsLoading, getUser, getError } from "../data/auth.selectors";
 import { signInStart } from "../data/auth.actions";
 import { connect } from "react-redux";
+import { useEffect } from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,12 +29,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignIn = ({ error, loading, signIn }) => {
+const SignIn = ({ error, loading, signIn, history, user }) => {
   const classes = useStyles();
   const [fields, updateFIeld] = useForm({
     email: "",
     password: "",
   });
+  const prevUser = usePrevious(user);
+
+  useEffect(() => {
+    if(prevUser === null && user !== null){
+      history.push('/');
+    }
+  }, [user, prevUser]);
 
   const onSubmit = () => {
     const allValid = canSubmit();
@@ -113,9 +116,12 @@ const SignIn = ({ error, loading, signIn }) => {
 };
 
 const mapStateToProps = (state, props) => {
+  const user = getUser(state);
+
   return {
     loading: getIsLoading(state),
     error: getError(state),
+    user,
   };
 };
 

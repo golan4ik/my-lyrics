@@ -1,4 +1,5 @@
 const express = require("express");
+const admin = require("firebase-admin");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const jwt_decode = require("jwt-decode");
@@ -6,6 +7,7 @@ const { ACCESS_TOKEN, ERROR_MESSAGES } = require("./constants");
 const { handleSearch, handleSignIn, handleSignUp } = require("./routes/index");
 
 const app = express();
+const db = admin.firestore();
 
 const isAuthenticatedRequest = (req, res, next) => {
   let token = null;
@@ -18,8 +20,18 @@ const isAuthenticatedRequest = (req, res, next) => {
 
   try {
     const decoded = jwt_decode(token);
-    req.user = decoded;
-    next();
+    console.log(decoded);
+    db.collection("/users")
+      .doc(`/${decoded.user_id}`)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          req.user = decoded;
+          next();
+        } else {
+          res.status(401).send(ERROR_MESSAGES.ACCESS_DENIED);
+        }
+      });
   } catch (ex) {
     res.status(401).send(ERROR_MESSAGES.ACCESS_DENIED);
   }

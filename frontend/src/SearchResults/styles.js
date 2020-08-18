@@ -1,5 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 import { orange } from "@material-ui/core/colors";
+import { findByLabelText } from "@testing-library/react";
 
 export const searchResultsStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +28,19 @@ export const searchResultsStyles = makeStyles((theme) => ({
 export const resultCardStyles = makeStyles((theme) => ({
   inline: {
     display: "inline",
+  },
+  listItem: {
+    flexWrap: 'wrap'
+  },
+  accordionSummary: {
+    height: 0,
+    minHeight: '0!important',
+    padding: 0
+  },
+  dataBlock: {
+    display: 'flex',
+    boxSizing: 'border-box',
+    flex: 1
   },
   avatar: {
     borderRadius: 0,

@@ -1,20 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Grid,
   makeStyles,
-  Paper,
-  FormControl,
   Typography,
-  InputLabel,
-  Input,
-  FormHelperText,
   Button,
 } from "@material-ui/core";
 import EmailValidator from "email-validator";
 import AuthFormControl from "../common/AuthFormControl";
-import { useForm } from "../common/hooks";
+import { useForm, usePrevious } from "../common/hooks";
 import { getIsLoading, getUser, getError } from "../data/auth.selectors";
-import { signInStart } from "../data/auth.actions";
+import { signUpStart } from "../data/auth.actions";
 import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignUp = ({ error, loading, signIn }) => {
+const SignUp = ({ error, loading, signUp, user, history }) => {
   const classes = useStyles();
   const [fields, updateFIeld] = useForm({
     userName: "",
@@ -42,12 +37,20 @@ const SignUp = ({ error, loading, signIn }) => {
     password2: "",
   });
 
+  const prevUser = usePrevious(user);
+
+  useEffect(() => {
+    if(prevUser === null && user !== null){
+      history.push('/');
+    }
+  }, [user, prevUser]);
+
   const onSubmit = () => {
     const allValid = canSubmit();
     console.log(fields);
     console.log(allValid);
 
-    signIn(fields);
+    signUp(fields);
   };
 
   const canSubmit = () => {
@@ -136,12 +139,13 @@ const mapStateToProps = (state, props) => {
   return {
     loading: getIsLoading(state),
     error: getError(state),
+    user: getUser(state),
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    signIn: (credentials) => dispatch(signInStart(credentials)),
+    signUp: (credentials) => dispatch(signUpStart(credentials)),
   };
 };
 
