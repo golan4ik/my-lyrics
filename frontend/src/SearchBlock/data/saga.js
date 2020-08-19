@@ -6,9 +6,12 @@ import {
   LOAD_MORE,
   incrementPage,
   setSearchProcess,
+  ON_LYRICS_LOAD_START,
+  lyricsLoadStart,
+  lyricsLoadSuccess,
 } from "./actions";
 import { getTerm, getPage } from "./selectors";
-import { searchLyrics } from "../../utils/networking";
+import { searchLyrics, getSongLyrics } from "../../utils/networking";
 import { setUser } from "../../data/auth.actions";
 
 function* loadMore() {
@@ -26,16 +29,26 @@ function* onSearchStart() {
     if (!error) {
       yield put(searchSuccess(results));
     } else {
-      localStorage.removeItem('user');
+      localStorage.removeItem("user");
       yield put(setUser(null));
       yield put(searchError(error));
     }
   } catch (e) {}
 }
 
+function* onLyricsLoadStartSaga({songPath}) {
+  //yield put(lyricsLoadStart(songPath));
+  const {lyrics, error} = yield call(getSongLyrics, songPath);
+
+  error && console.log(error);
+
+  yield put(lyricsLoadSuccess(songPath, lyrics));
+}
+
 export default function* rootSaga() {
   yield all([
     takeLatest(SEARCH_START, onSearchStart),
     takeLatest(LOAD_MORE, loadMore),
+    takeLatest(ON_LYRICS_LOAD_START, onLyricsLoadStartSaga),
   ]);
 }

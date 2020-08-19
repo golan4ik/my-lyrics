@@ -30,17 +30,28 @@ export const resultCardStyles = makeStyles((theme) => ({
     display: "inline",
   },
   listItem: {
-    flexWrap: 'wrap'
+    flexWrap: "wrap",
+  },
+  lyricsPanel: {
+    flexBasis: "100%",
+  },
+  lyricsContent: {
+    maxHeight: '40vh',
+    overflow: 'hidden',
+    overflowY: 'auto',
+    '& a': {
+      all: 'unset'
+    }
   },
   accordionSummary: {
     height: 0,
-    minHeight: '0!important',
-    padding: 0
+    minHeight: "0!important",
+    padding: 0,
   },
   dataBlock: {
-    display: 'flex',
-    boxSizing: 'border-box',
-    flex: 1
+    display: "flex",
+    boxSizing: "border-box",
+    flex: 1,
   },
   avatar: {
     borderRadius: 0,

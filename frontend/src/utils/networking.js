@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 
 const SEARCH_URL = `/search`;
 const SIGNIN_URL = "/signin";
+const SIGNUP_URL = "/signup";
+const LYRICS_URL = '/getLyrics'
 const MAX_PER_PAGE = 20;
 
 export const getSavedUserData = () => {
@@ -72,3 +74,37 @@ export const signIn = ({ email, password }) => {
       };
     });
 };
+
+export const signUp = ({ email, password, userName }) => {
+  return axios
+    .post(SIGNUP_URL, {
+      email,
+      password,
+      userName,
+    })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((e) => {
+      console.log(e);
+      return {
+        error: "Server error",
+      };
+    });
+};
+
+
+export const getSongLyrics = (songPath) => {
+  return axios.post(LYRICS_URL, {
+    songPath
+  })
+  .then(res => {
+    return res.data;
+  })
+  .catch(e => {
+    console.log(e);
+    return {
+      message: e.message
+    }
+  })
+}

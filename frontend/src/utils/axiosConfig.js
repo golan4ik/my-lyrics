@@ -7,8 +7,7 @@ axios.defaults.baseURL = BASE_API_URL;
 export default () => {
   axios.interceptors.request.use(
     function (config) {
-      if (config.method === "get")
-        config.headers.authorization = `Bearer ${getSavedUserData().token}`;
+      config.headers.authorization = `Bearer ${getSavedUserData().token}`;
       return config;
     },
     function (error) {

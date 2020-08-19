@@ -4,7 +4,12 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const jwt_decode = require("jwt-decode");
 const { ACCESS_TOKEN, ERROR_MESSAGES } = require("./constants");
-const { handleSearch, handleSignIn, handleSignUp } = require("./routes/index");
+const {
+  handleSearch,
+  handleSignIn,
+  handleSignUp,
+  getLyrics,
+} = require("./routes/index");
 
 const app = express();
 const db = admin.firestore();
@@ -20,7 +25,7 @@ const isAuthenticatedRequest = (req, res, next) => {
 
   try {
     const decoded = jwt_decode(token);
-    console.log(decoded);
+    console.log('token ok');
     db.collection("/users")
       .doc(`/${decoded.user_id}`)
       .get()
@@ -42,13 +47,14 @@ app
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: false }));
 
-app.use((req, res, next) => {
+/* app.use((req, res, next) => {
   req.query.access_token = ACCESS_TOKEN;
 
   next();
-});
+}); */
 
 app.get("/search", isAuthenticatedRequest, handleSearch);
+app.post("/getLyrics", isAuthenticatedRequest, getLyrics);
 app.post("/signin", handleSignIn);
 app.post("/signup", handleSignUp);
 

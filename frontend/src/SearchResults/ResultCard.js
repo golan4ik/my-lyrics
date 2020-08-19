@@ -19,6 +19,8 @@ const ResultCard = (props) => {
     primary_artist: { image_url, name },
     full_title,
     favorite,
+    loadingLyrics,
+    path,
     lyrics,
   } = props;
 
@@ -26,9 +28,10 @@ const ResultCard = (props) => {
 
   const getLyrics = () => {
     setShowLyrics(!showLyrics);
+    !loadingLyrics && !showLyrics && !lyrics && props.getLyrics(path);
   };
 
-  console.log(showLyrics);
+  //console.log(showLyrics);
 
   return (
     <ListItem alignItems="flex-start" className={classes.listItem}>
@@ -61,15 +64,14 @@ const ResultCard = (props) => {
           )}
         </IconButton>
       </ListItemIcon>
-      <Accordion expanded={showLyrics} onChange={getLyrics}>
+      <Accordion expanded={showLyrics} onChange={getLyrics} className={classes.lyricsPanel}>
         <AccordionSummary
           className={classes.accordionSummary}
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         ></AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            {lyrics}
+        <AccordionDetails className={classes.lyricsContent}>
+          <Typography dangerouslySetInnerHTML={{__html: lyrics}}>
           </Typography>
         </AccordionDetails>
       </Accordion>

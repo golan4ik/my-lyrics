@@ -7,10 +7,9 @@ import {
   setUser,
   signInError,
 } from "./auth.actions";
-import { signIn } from "../utils/networking";
+import { signIn, signUp } from "../utils/networking";
 
 function* signInStartSaga({ credentials }) {
-  console.log(credentials);
   yield put(onSignInStart());
 
   const { token, userName, message } = yield call(signIn, credentials);
@@ -22,9 +21,16 @@ function* signInStartSaga({ credentials }) {
     yield put(signInError(message));
   }
 }
-function* signUpStartSaga(credentials) {
-  console.log(credentials);
+function* signUpStartSaga({credentials}) {
   yield put(onSignUpStart());
+  const { token, userName, message } = yield call(signUp, credentials);
+
+  if (!message) {
+    localStorage.setItem("user", JSON.stringify({ token, userName }));
+    yield put(setUser(userName));
+  } else {
+    yield put(signInError(message));
+  }
 }
 
 export default function* authSaga() {
