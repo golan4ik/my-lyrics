@@ -1,4 +1,4 @@
-import { all, call, put, select, takeLatest } from "redux-saga/effects";
+import { all, call, put, select, takeLatest, takeEvery } from "redux-saga/effects";
 import {
   SEARCH_START,
   searchSuccess,
@@ -49,6 +49,6 @@ export default function* rootSaga() {
   yield all([
     takeLatest(SEARCH_START, onSearchStart),
     takeLatest(LOAD_MORE, loadMore),
-    takeLatest(ON_LYRICS_LOAD_START, onLyricsLoadStartSaga),
+    takeEvery(ON_LYRICS_LOAD_START, onLyricsLoadStartSaga),
   ]);
 }

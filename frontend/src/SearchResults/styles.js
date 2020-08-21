@@ -37,12 +37,18 @@ export const resultCardStyles = makeStyles((theme) => ({
     flexBasis: "100%",
   },
   lyricsContent: {
+    position: 'relative',
+    minHeight: '20vh',
     maxHeight: '40vh',
     overflow: 'hidden',
     overflowY: 'auto',
     '& a': {
       all: 'unset'
     }
+  },
+  backDrop: {
+    position: 'absolute',
+    zIndex: 1
   },
   accordionSummary: {
     height: 0,

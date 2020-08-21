@@ -9,9 +9,15 @@ import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
-import { IconButton, AccordionSummary } from "@material-ui/core";
+import {
+  IconButton,
+  AccordionSummary,
+  Backdrop,
+  CircularProgress,
+} from "@material-ui/core";
 import { resultCardStyles } from "./styles";
 import { useState } from "react";
+import { useEffect } from "react";
 
 const ResultCard = (props) => {
   const classes = resultCardStyles();
@@ -21,6 +27,7 @@ const ResultCard = (props) => {
     favorite,
     loadingLyrics,
     path,
+    id,
     lyrics,
   } = props;
 
@@ -30,8 +37,6 @@ const ResultCard = (props) => {
     setShowLyrics(!showLyrics);
     !loadingLyrics && !showLyrics && !lyrics && props.getLyrics(path);
   };
-
-  //console.log(showLyrics);
 
   return (
     <ListItem alignItems="flex-start" className={classes.listItem}>
@@ -64,15 +69,23 @@ const ResultCard = (props) => {
           )}
         </IconButton>
       </ListItemIcon>
-      <Accordion expanded={showLyrics} onChange={getLyrics} className={classes.lyricsPanel}>
+      <Accordion
+        expanded={showLyrics}
+        onChange={getLyrics}
+        className={classes.lyricsPanel}
+      >
         <AccordionSummary
           className={classes.accordionSummary}
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         ></AccordionSummary>
         <AccordionDetails className={classes.lyricsContent}>
-          <Typography dangerouslySetInnerHTML={{__html: lyrics}}>
-          </Typography>
+          <Typography dangerouslySetInnerHTML={{ __html: lyrics }}></Typography>
+          {loadingLyrics && (
+            <Backdrop open={true} className={classes.backDrop}>
+              <CircularProgress color="inherit" />
+            </Backdrop>
+          )}
         </AccordionDetails>
       </Accordion>
     </ListItem>
