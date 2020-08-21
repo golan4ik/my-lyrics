@@ -6,6 +6,7 @@ export const searchResultsStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     /* maxWidth: "36ch", */
+    minHeight: `calc(70vh - ${theme.spacing(3)}px)`,
     maxHeight: `calc(70vh - ${theme.spacing(3)}px)`,
     overflow: "auto",
     backgroundColor: theme.palette.background.paper,

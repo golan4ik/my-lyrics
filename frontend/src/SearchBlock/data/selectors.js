@@ -1,9 +1,10 @@
-import { NAME } from "./reducer";
+import { NAME as SEARCH } from "./reducer";
+import { NAME as RESULTS } from "./results.reducer";
 
-const get = (state) => state[NAME];
+const getSearch = (state) => state[SEARCH];
 
-export const getResults = (state) => get(state).results;
-export const getError = (state) => get(state).error;
-export const getIsInProcess = (state) => get(state).isInprocess;
-export const getTerm = (state) => get(state).term;
-export const getPage = (state) => get(state).page;
+export const getResults = (state) => state[RESULTS];
+export const getError = (state) => getSearch(state).error;
+export const getIsInProcess = (state) => getSearch(state).isInprocess;
+export const getTerm = (state) => getSearch(state).term;
+export const getPage = (state) => getSearch(state).page;

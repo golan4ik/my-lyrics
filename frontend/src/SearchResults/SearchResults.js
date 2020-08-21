@@ -18,7 +18,7 @@ const SearchResults = (props) => {
   return (
     <Grid justify="center" container item xs={12}>
       <List className={classes.root}>
-        {isInProcess && results.length > 0 && (
+        {isInProcess && (
           <Backdrop className={classes.overlay} open={true}>
             <CircularProgress color="inherit" />
           </Backdrop>
@@ -48,6 +48,7 @@ const SearchResults = (props) => {
 };
 
 const mapStateToProps = (state) => {
+  console.log(state);
   const results = getResults(state);
   const isInProcess = getIsInProcess(state);
   return {
