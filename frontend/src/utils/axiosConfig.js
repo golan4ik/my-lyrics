@@ -8,6 +8,7 @@ export default () => {
   axios.interceptors.request.use(
     function (config) {
       config.headers.authorization = `Bearer ${getSavedUserData().token}`;
+      
       return config;
     },
     function (error) {

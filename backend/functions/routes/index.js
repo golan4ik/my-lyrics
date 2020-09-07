@@ -31,68 +31,6 @@ exports.handleSearch = (req, res) => {
     });
 };
 
-exports.handleSignIn = (req, res) => {
-  const { email, password } = req.body;
-  let user = null,
-    userName = null;
-
-  firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password)
-    .then((data) => {
-      user = data.user;
-
-      return db.collection("/users").doc(user.uid).get();
-    })
-    .then((dbUser) => {
-      userName = dbUser.data().name;
-      return user.getIdToken();
-    })
-    .then((token) => {
-      res.status(200).json({ token, userName });
-    })
-    .catch((e) => {
-      console.log(e.message);
-      res.status(400).json({ message: e.message });
-    });
-};
-
-exports.handleSignUp = (req, res) => {
-  const { email, password, userName } = req.body;
-  console.log("signin up");
-
-  let user = null;
-
-  firebase
-    .auth()
-    .createUserWithEmailAndPassword(email, password)
-    .then((data) => {
-      user = data.user;
-
-      const newUserCredentials = {
-        email: user.email,
-        id: user.uid,
-        name: userName,
-      };
-
-      return db.doc(`/users/${newUserCredentials.id}`).set(newUserCredentials);
-    })
-    .then(() => {
-      return user.getIdToken();
-    })
-    .then((token) => {
-      res.status(200).json({ token });
-    })
-    .catch((e) => {
-      console.log(e.code);
-      res.status(400).json({
-        message:
-          e.code === "auth/email-already-in-use"
-            ? e.message
-            : ERROR_MESSAGES.INCORRECT_CREDENTIALS,
-      });
-    });
-};
 
 exports.getLyrics = (req, res) => {
   const url = `${GENIUS_BASE_URL}${req.body.songPath}`;
@@ -100,9 +38,6 @@ exports.getLyrics = (req, res) => {
   //console.log(axios);
   axios
     .get(url,{
-      /* headers: {
-        Authorization: `Bearer ${ACCESS_TOKEN}`
-      }, */
       params: {
         access_token: ACCESS_TOKEN
       }

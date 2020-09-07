@@ -2,14 +2,10 @@ const express = require("express");
 const admin = require("firebase-admin");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const jwt_decode = require("jwt-decode");
+const jwt = require("jsonwebtoken");
 const { ACCESS_TOKEN, ERROR_MESSAGES } = require("./constants");
-const {
-  handleSearch,
-  handleSignIn,
-  handleSignUp,
-  getLyrics,
-} = require("./routes/index");
+const { handleSearch, getLyrics } = require("./routes/index");
+const { authRoutes } = require("./routes/auth");
 
 const app = express();
 const db = admin.firestore();
@@ -23,11 +19,16 @@ const isAuthenticatedRequest = (req, res, next) => {
 
   if (!token) return res.status(401).send(ERROR_MESSAGES.ACCESS_DENIED);
 
+  const decoded = jwt.verify(token, process.env.TOKEN_SALT);
+
+  if (!decoded) return res.status(401).send(ERROR_MESSAGES.ACCESS_DENIED);
+
+  console.log(decoded);
+
   try {
-    const decoded = jwt_decode(token);
-    console.log('token ok');
+    console.log("token ok");
     db.collection("/users")
-      .doc(`/${decoded.user_id}`)
+      .doc(`/${decoded.uid}`)
       .get()
       .then((doc) => {
         if (doc.exists) {
@@ -47,15 +48,9 @@ app
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: false }));
 
-/* app.use((req, res, next) => {
-  req.query.access_token = ACCESS_TOKEN;
-
-  next();
-}); */
-
 app.get("/search", isAuthenticatedRequest, handleSearch);
 app.post("/getLyrics", isAuthenticatedRequest, getLyrics);
-app.post("/signin", handleSignIn);
-app.post("/signup", handleSignUp);
+
+app.use(authRoutes);
 
 module.exports = app;

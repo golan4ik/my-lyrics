@@ -1,7 +1,7 @@
 exports.config = {
-  apiKey: "AIzaSyDzcioxXD9mfSVMzV4aHVYgfY9Bc1mnvvc",
+  apiKey: process.env.FB_API_KEY,
   authDomain: "my-lyrics-83a85.firebaseapp.com",
-  databaseURL: "https://my-lyrics-83a85.firebaseio.com",
+  databaseURL: process.env.FB_DB_URI,
   projectId: "my-lyrics-83a85",
   storageBucket: "my-lyrics-83a85.appspot.com",
   messagingSenderId: "895381854832",
