@@ -60,7 +60,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadMore: () => dispatch(loadMore()),
-    getLyrics: (songPath) => dispatch(onLyricsLoadStart(songPath))
+    getLyrics: (songPath, songId) => dispatch(onLyricsLoadStart(songPath, songId))
   };
 };
 

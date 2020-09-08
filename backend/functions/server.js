@@ -23,8 +23,6 @@ const isAuthenticatedRequest = (req, res, next) => {
 
   if (!decoded) return res.status(401).send(ERROR_MESSAGES.ACCESS_DENIED);
 
-  console.log(decoded);
-
   try {
     console.log("token ok");
     db.collection("/users")

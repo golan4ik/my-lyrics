@@ -10,10 +10,11 @@ export const LYRICS_LOAD_START = "SEARCH/LYRICS/ON_LOAD/START";
 export const LYRICS_LOAD_SUCCESS = "SEARCH/LYRICS/ON_LOAD/SUCCESS";
 export const LYRICS_LOAD_ERROR = "SEARCH/LYRICS/ON_LOAD/ERROR";
 
-export const onLyricsLoadStart = (songPath) => {
+export const onLyricsLoadStart = (songPath, songId) => {
   return {
     type: ON_LYRICS_LOAD_START,
     songPath,
+    songId
   };
 };
 

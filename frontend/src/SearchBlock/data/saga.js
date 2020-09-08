@@ -36,9 +36,9 @@ function* onSearchStart() {
   } catch (e) {}
 }
 
-function* onLyricsLoadStartSaga({songPath}) {
+function* onLyricsLoadStartSaga({songPath, songId}) {
   //yield put(lyricsLoadStart(songPath));
-  const {lyrics, error} = yield call(getSongLyrics, songPath);
+  const {lyrics, error} = yield call(getSongLyrics, songPath, songId);
 
   error && console.log(error);
 

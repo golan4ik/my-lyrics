@@ -94,9 +94,10 @@ export const signUp = ({ email, password, userName }) => {
 };
 
 
-export const getSongLyrics = (songPath) => {
+export const getSongLyrics = (songPath, songId) => {
   return axios.post(LYRICS_URL, {
-    songPath
+    songPath,
+    songId
   })
   .then(res => {
     return res.data;

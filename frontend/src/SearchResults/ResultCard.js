@@ -35,7 +35,7 @@ const ResultCard = (props) => {
 
   const getLyrics = () => {
     setShowLyrics(!showLyrics);
-    !loadingLyrics && !showLyrics && !lyrics && props.getLyrics(path);
+    !loadingLyrics && !showLyrics && !lyrics && props.getLyrics(path, id);
   };
 
   return (

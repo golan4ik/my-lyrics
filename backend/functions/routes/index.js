@@ -1,7 +1,6 @@
 const axios = require("axios");
 const admin = require("firebase-admin");
 const firebase = require("firebase");
-const cheerio = require("cheerio");
 const {
   GENIUS_API_SEARCH_URL,
   GENIUS_API_LYRICS_URL,
@@ -31,27 +30,22 @@ exports.handleSearch = (req, res) => {
     });
 };
 
-
 exports.getLyrics = (req, res) => {
-  const url = `${GENIUS_BASE_URL}${req.body.songPath}`;
+  const url = `${GENIUS_BASE_URL}/songs/${req.body.songId}/embed.js`;
   console.log(url);
   //console.log(axios);
   axios
-    .get(url,{
-      params: {
-        access_token: ACCESS_TOKEN
-      }
-    })
-    .then((response) => {
-      let $ = cheerio.load(response.data);
+    .get(url)
+    .then(({data}) => {
+      const match = data.match(/<p>(.*?)<.\/p>/g);
+      const lyrics = match ? match[0] : '';
+      let sanitized = lyrics.replace(/<.*a>/g, '');
+      sanitized = sanitized.replace(/\\n/g, '');
+      sanitized = sanitized.replace(/\\/g, '');
+
+
       try {
-        const pageData = $(".lyrics p");
-
-        $(pageData).find("a").removeAttr("href");
-
-        const lyrics = cheerio.html(pageData);
-
-        return res.status(200).json({ lyrics });
+        return res.status(200).json({ lyrics: sanitized });
       } catch (e) {
         console.log(e.message);
         return res
