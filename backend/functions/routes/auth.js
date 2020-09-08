@@ -1,10 +1,8 @@
 const express = require("express");
 const firebase = require("firebase");
-const admin = require("firebase-admin");
+const db = require("../fbApp").db;
 const jwt = require("jsonwebtoken");
 const { ERROR_MESSAGES } = require("../constants");
-
-const db = admin.firestore();
 const router = express.Router();
 
 router.post("/signin", (req, res) => {

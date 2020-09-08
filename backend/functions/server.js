@@ -4,7 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const { ACCESS_TOKEN, ERROR_MESSAGES } = require("./constants");
-const { handleSearch, getLyrics } = require("./routes/index");
+const { handleSearch, getLyrics, addToFavorites } = require("./routes/index");
 const { authRoutes } = require("./routes/auth");
 
 const app = express();
@@ -48,6 +48,7 @@ app
 
 app.get("/search", isAuthenticatedRequest, handleSearch);
 app.post("/getLyrics", isAuthenticatedRequest, getLyrics);
+app.post("/addToFavorites", isAuthenticatedRequest, addToFavorites);
 
 app.use(authRoutes);
 

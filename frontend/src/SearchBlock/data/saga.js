@@ -1,4 +1,11 @@
-import { all, call, put, select, takeLatest, takeEvery } from "redux-saga/effects";
+import {
+  all,
+  call,
+  put,
+  select,
+  takeLatest,
+  takeEvery,
+} from "redux-saga/effects";
 import {
   SEARCH_START,
   searchSuccess,
@@ -9,9 +16,11 @@ import {
   ON_LYRICS_LOAD_START,
   lyricsLoadStart,
   lyricsLoadSuccess,
+  LYRICS_ADD_TO_FAVORITES_START,
+  onLyricsAddToFavorites,
 } from "./actions";
 import { getTerm, getPage } from "./selectors";
-import { searchLyrics, getSongLyrics } from "../../utils/networking";
+import { searchLyrics, getSongLyrics, addToFavorites } from "../../utils/networking";
 import { setUser } from "../../data/auth.actions";
 
 function* loadMore() {
@@ -36,13 +45,17 @@ function* onSearchStart() {
   } catch (e) {}
 }
 
-function* onLyricsLoadStartSaga({songPath, songId}) {
+function* onLyricsLoadStartSaga({ songPath, songId }) {
   //yield put(lyricsLoadStart(songPath));
-  const {lyrics, error} = yield call(getSongLyrics, songPath, songId);
+  const { lyrics, error } = yield call(getSongLyrics, songPath, songId);
 
   error && console.log(error);
 
   yield put(lyricsLoadSuccess(songPath, lyrics));
+}
+
+function* onAddToFavoritesSaga({ songId }) {
+  yield call(addToFavorites, songId);
 }
 
 export default function* rootSaga() {
@@ -50,5 +63,6 @@ export default function* rootSaga() {
     takeLatest(SEARCH_START, onSearchStart),
     takeLatest(LOAD_MORE, loadMore),
     takeEvery(ON_LYRICS_LOAD_START, onLyricsLoadStartSaga),
+    takeEvery(LYRICS_ADD_TO_FAVORITES_START, onAddToFavoritesSaga),
   ]);
 }

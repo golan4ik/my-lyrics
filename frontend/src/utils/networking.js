@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 const SEARCH_URL = `/search`;
 const SIGNIN_URL = "/signin";
 const SIGNUP_URL = "/signup";
-const LYRICS_URL = '/getLyrics'
+const LYRICS_URL = "/getLyrics";
+const ADD_TO_FAVORITES_URL = "/addToFavorites";
 const MAX_PER_PAGE = 20;
 
 export const getSavedUserData = () => {
@@ -93,19 +94,36 @@ export const signUp = ({ email, password, userName }) => {
     });
 };
 
-
 export const getSongLyrics = (songPath, songId) => {
-  return axios.post(LYRICS_URL, {
-    songPath,
-    songId
-  })
-  .then(res => {
-    return res.data;
-  })
-  .catch(e => {
-    console.log(e);
-    return {
-      message: e.message
-    }
-  })
-}
+  return axios
+    .post(LYRICS_URL, {
+      songPath,
+      songId,
+    })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((e) => {
+      console.log(e);
+      return {
+        message: e.message,
+      };
+    });
+};
+
+export const addToFavorites = (songId) => {
+  console.log(songId);
+  return axios
+    .post(ADD_TO_FAVORITES_URL, {
+      songId,
+    })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((e) => {
+      console.log(e);
+      return {
+        message: e.message,
+      };
+    });
+};

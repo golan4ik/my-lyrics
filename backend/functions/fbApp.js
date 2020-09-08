@@ -4,3 +4,5 @@ const { config } = require("./fbConfig");
 
 admin.initializeApp();
 firebase.initializeApp(config);
+
+exports.db = admin.firestore();

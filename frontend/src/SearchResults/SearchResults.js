@@ -6,12 +6,12 @@ import ResultCard from "./ResultCard";
 import { Divider, Grid, Button } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { loadMore, onLyricsLoadStart } from "../SearchBlock/data/actions";
+import { loadMore, onLyricsLoadStart, onLyricsAddToFavorites } from "../SearchBlock/data/actions";
 import { searchResultsStyles } from "./styles";
 
 const SearchResults = (props) => {
   const classes = searchResultsStyles();
-  const { results, loadMore, isInProcess, getLyrics } = props;
+  const { results, loadMore, isInProcess, getLyrics, addToFavorite } = props;
 
   //console.log(results);
 
@@ -25,7 +25,11 @@ const SearchResults = (props) => {
         )}
         {results.map((result) => (
           <React.Fragment key={result.id}>
-            <ResultCard {...result} getLyrics={getLyrics} />
+            <ResultCard
+              {...result}
+              getLyrics={getLyrics}
+              addToFavorite={addToFavorite}
+            />
             <Divider variant="inset" component="li" />
           </React.Fragment>
         ))}
@@ -60,7 +64,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadMore: () => dispatch(loadMore()),
-    getLyrics: (songPath, songId) => dispatch(onLyricsLoadStart(songPath, songId))
+    getLyrics: (songPath, songId) =>
+      dispatch(onLyricsLoadStart(songPath, songId)),
+    addToFavorite: (songId) => dispatch(onLyricsAddToFavorites(songId)),
   };
 };
 

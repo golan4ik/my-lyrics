@@ -29,6 +29,7 @@ const ResultCard = (props) => {
     path,
     id,
     lyrics,
+    addToFavorite,
   } = props;
 
   const [showLyrics, setShowLyrics] = useState(false);
@@ -61,9 +62,11 @@ const ResultCard = (props) => {
         />
       </div>
       <ListItemIcon>
-        <IconButton>
+        <IconButton onClick={() => !favorite && addToFavorite(id)}>
           {!favorite ? (
-            <StarBorder className={classes.favoriteIcon} />
+            <StarBorder
+              className={classes.favoriteIcon}
+            />
           ) : (
             <Star className={classes.favoriteIconSelected} />
           )}

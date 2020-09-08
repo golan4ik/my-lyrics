@@ -9,6 +9,14 @@ export const ON_LYRICS_LOAD_START = "SEARCH/LYRICS/ON_LOAD/START";
 export const LYRICS_LOAD_START = "SEARCH/LYRICS/ON_LOAD/START";
 export const LYRICS_LOAD_SUCCESS = "SEARCH/LYRICS/ON_LOAD/SUCCESS";
 export const LYRICS_LOAD_ERROR = "SEARCH/LYRICS/ON_LOAD/ERROR";
+export const LYRICS_ADD_TO_FAVORITES_START = "SEARCH/LYRICS/FAVORITES/ADD/START";
+
+export const onLyricsAddToFavorites = (songId) => {
+  return {
+    type: LYRICS_ADD_TO_FAVORITES_START,
+    songId
+  }
+}
 
 export const onLyricsLoadStart = (songPath, songId) => {
   return {
