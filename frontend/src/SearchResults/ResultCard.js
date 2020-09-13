@@ -22,7 +22,8 @@ import { useEffect } from "react";
 const ResultCard = (props) => {
   const classes = resultCardStyles();
   const {
-    primary_artist: { image_url, name },
+    header_image_thumbnail_url,
+    title,
     full_title,
     favorite,
     loadingLyrics,
@@ -43,30 +44,28 @@ const ResultCard = (props) => {
     <ListItem alignItems="flex-start" className={classes.listItem}>
       <div className={classes.dataBlock} onClick={getLyrics}>
         <ListItemAvatar>
-          <Avatar className={classes.avatar} alt={full_title} src={image_url} />
+          <Avatar
+            className={classes.avatar}
+            alt={full_title}
+            src={header_image_thumbnail_url}
+          />
         </ListItemAvatar>
         <ListItemText
-          primary={full_title}
-          secondary={
-            <React.Fragment>
-              <Typography
-                component="span"
-                variant="body2"
-                className={classes.inline}
-                color="textPrimary"
-              >
-                {name}
-              </Typography>
-            </React.Fragment>
+          primary={
+            <Typography
+              component="span"
+              variant="body1"
+              color="textPrimary"
+            >
+              {full_title}
+            </Typography>
           }
         />
       </div>
       <ListItemIcon>
         <IconButton onClick={() => !favorite && addToFavorite(id)}>
           {!favorite ? (
-            <StarBorder
-              className={classes.favoriteIcon}
-            />
+            <StarBorder className={classes.favoriteIcon} />
           ) : (
             <Star className={classes.favoriteIconSelected} />
           )}

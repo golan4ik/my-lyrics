@@ -127,7 +127,7 @@ const getLyrics = (songId) => {
 };
 
 exports.getLyrics = (req, res) => {
-  getLyrics(songId)
+  getLyrics(req.body.songId)
     .then((lyrics) => {
       return res.status(200).json({ lyrics });
     })
