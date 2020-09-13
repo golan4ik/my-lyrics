@@ -43,7 +43,7 @@ const ResultCard = (props) => {
   return (
     <ListItem
       alignItems="flex-start"
-      className={{[classes.listItem]: true, favorite}}
+      className={`${classes.listItem} ${favorite ? 'favorite': ''}`}
       disabled={!!disabled}
     >
       <div className={classes.dataBlock} onClick={getLyrics}>
