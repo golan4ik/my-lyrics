@@ -18,10 +18,16 @@ import {
   lyricsLoadSuccess,
   LYRICS_ADD_TO_FAVORITES_START,
   onLyricsAddToFavorites,
+  updateSongData,
 } from "./actions";
 import { getTerm, getPage } from "./selectors";
-import { searchLyrics, getSongLyrics, addToFavorites } from "../../utils/networking";
+import {
+  searchLyrics,
+  getSongLyrics,
+  addToFavorites,
+} from "../../utils/networking";
 import { setUser } from "../../data/auth.actions";
+import { getSongById } from "./results.selectors";
 
 function* loadMore() {
   yield put(incrementPage());
@@ -55,7 +61,22 @@ function* onLyricsLoadStartSaga({ songPath, songId }) {
 }
 
 function* onAddToFavoritesSaga({ songId }) {
-  yield call(addToFavorites, songId);
+  const { success, error } = yield call(addToFavorites, songId);
+
+  if (success) {
+    //console.log('Song added to favorites');
+    const song = yield select(getSongById, songId);
+
+    // TODO: add validation here
+
+    song.favorite = true;
+
+    console.log(song);
+
+    yield put(updateSongData(song));
+  } else if (error) {
+    console.log("Failed to add song to favorites");
+  }
 }
 
 export default function* rootSaga() {

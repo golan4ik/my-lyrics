@@ -12,6 +12,7 @@ const { parseSearchResponse, extractLyricsFromJs } = require("../utils");
 
 exports.handleSearch = (req, res) => {
   console.log(req.query);
+  console.log(req.user.uid);
   axios
     .get(GENIUS_API_SEARCH_URL, {
       params: {
@@ -19,8 +20,24 @@ exports.handleSearch = (req, res) => {
         access_token: ACCESS_TOKEN,
       },
     })
-    .then((response) => {
-      return res.status(200).json(parseSearchResponse(response.data));
+    .then(async (response) => {
+      const results = parseSearchResponse(response.data);
+      const favorites = await db
+        .doc(`/users/${req.user.uid}`)
+        .get("favorites")
+        .then((userRef) => Object.keys(userRef.data().favorites));
+
+      console.log("User favorites: ", favorites);
+
+      return res
+        .status(200)
+        .json(
+          results.map((result) =>
+            favorites.includes(result.id.toString())
+              ? { ...result, favorite: true }
+              : result
+          )
+        );
     })
     .catch((e) => {
       console.error(e.message);
@@ -45,7 +62,7 @@ exports.addToFavorites = async (req, res) => {
         { merge: true }
       );
       console.log("Song added to favorites: ", result);
-      return res.status(200);
+      return res.status(200).json({ success: true });
     } catch (e) {
       return res
         .status(500)
@@ -63,8 +80,8 @@ exports.addToFavorites = async (req, res) => {
         };
         db.doc(`/songs/${songId}`)
           .set(song)
-          .then(async (res) => {
-            console.log("Song added: ", res.data());
+          .then(async () => {
+            console.log("Song added");
 
             const result = await db.doc(`users/${user.uid}`).update(
               {
