@@ -32,6 +32,10 @@ export const resultCardStyles = makeStyles((theme) => ({
   },
   listItem: {
     flexWrap: "wrap",
+    cursor: 'default',
+    '&.Mui-disabled': {
+      cursor: 'wait'
+    }
   },
   lyricsPanel: {
     flexBasis: "100%",

@@ -6,3 +6,4 @@ admin.initializeApp();
 firebase.initializeApp(config);
 
 exports.db = admin.firestore();
+exports.firebase = firebase;

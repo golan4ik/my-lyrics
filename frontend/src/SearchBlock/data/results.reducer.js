@@ -8,7 +8,7 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case actions.UPDATE_SONG_DATA:
       return state.map((song) => {
-        return song.id === action.song.songId ? action.song : song;
+        return song.id === action.id ? { ...song, ...action.data } : song;
       });
     case actions.LYRICS_LOAD_START:
       return state.map((song) => {

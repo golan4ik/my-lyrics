@@ -13,7 +13,7 @@ export const LYRICS_ADD_TO_FAVORITES_START =
   "SEARCH/LYRICS/FAVORITES/ADD/START";
 export const UPDATE_SONG_DATA = "SEARCH/SONG/UPDATE";
 
-export const updateSongData = (song) => ({ type: UPDATE_SONG_DATA, song });
+export const updateSongData = (id, data) => ({ type: UPDATE_SONG_DATA, id, data });
 
 export const onLyricsAddToFavorites = (songId) => {
   return {
