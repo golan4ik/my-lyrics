@@ -1,0 +1,1 @@
+export const BASE_API_URL = 'http://localhost:5001/my-lyrics-83a85/europe-west1/api';
