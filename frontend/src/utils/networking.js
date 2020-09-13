@@ -111,8 +111,7 @@ export const getSongLyrics = (songPath, songId) => {
     });
 };
 
-export const addToFavorites = (songId) => {
-  console.log(songId);
+export const addToFavorites = (songId) => { 
   return axios
     .post(ADD_TO_FAVORITES_URL, {
       songId,
