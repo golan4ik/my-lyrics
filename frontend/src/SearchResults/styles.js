@@ -32,27 +32,30 @@ export const resultCardStyles = makeStyles((theme) => ({
   },
   listItem: {
     flexWrap: "wrap",
-    cursor: 'default',
-    '&.Mui-disabled': {
-      cursor: 'wait'
-    }
+    cursor: "default",
+    "&.Mui-disabled": {
+      cursor: "wait",
+    },
+    "&.favorite": {
+      "background-color": "lightgoldenrodyellow",
+    },
   },
   lyricsPanel: {
     flexBasis: "100%",
   },
   lyricsContent: {
-    position: 'relative',
-    minHeight: '20vh',
-    maxHeight: '40vh',
-    overflow: 'hidden',
-    overflowY: 'auto',
-    '& a': {
-      all: 'unset'
-    }
+    position: "relative",
+    minHeight: "20vh",
+    maxHeight: "40vh",
+    overflow: "hidden",
+    overflowY: "auto",
+    "& a": {
+      all: "unset",
+    },
   },
   backDrop: {
-    position: 'absolute',
-    zIndex: 1
+    position: "absolute",
+    zIndex: 1,
   },
   accordionSummary: {
     height: 0,
