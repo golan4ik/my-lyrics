@@ -12,6 +12,7 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import "./App.css";
 import Signup from "./Signup/Signup";
+import Favorites from "./Favorites/Favorites";
 
 axiosConfig();
 const store = configureStore();
@@ -46,6 +47,7 @@ function App() {
 
           <Switch>
             <ProtectedRoute exact path="/" component={Main} />
+            <ProtectedRoute exact path="/favorites" component={Favorites} />
             <Route exact path="/signin" component={SignIn} />
             <Route exact path="/signup" component={Signup} />
             <Route path="*" component={() => <div>404 Not Found</div>} />

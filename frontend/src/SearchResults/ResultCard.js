@@ -17,13 +17,12 @@ import {
 } from "@material-ui/core";
 import { resultCardStyles } from "./styles";
 import { useState } from "react";
-import { useEffect } from "react";
 
 const ResultCard = (props) => {
   const classes = resultCardStyles();
   const {
     header_image_thumbnail_url,
-    title,
+    disabled,
     full_title,
     favorite,
     loadingLyrics,
@@ -36,12 +35,17 @@ const ResultCard = (props) => {
   const [showLyrics, setShowLyrics] = useState(false);
 
   const getLyrics = () => {
+    if (disabled) return;
     setShowLyrics(!showLyrics);
     !loadingLyrics && !showLyrics && !lyrics && props.getLyrics(path, id);
   };
 
   return (
-    <ListItem alignItems="flex-start" className={classes.listItem}>
+    <ListItem
+      alignItems="flex-start"
+      className={`${classes.listItem} ${favorite ? 'favorite': ''}`}
+      disabled={!!disabled}
+    >
       <div className={classes.dataBlock} onClick={getLyrics}>
         <ListItemAvatar>
           <Avatar
@@ -52,18 +56,14 @@ const ResultCard = (props) => {
         </ListItemAvatar>
         <ListItemText
           primary={
-            <Typography
-              component="span"
-              variant="body1"
-              color="textPrimary"
-            >
+            <Typography component="span" variant="body1" color="textPrimary">
               {full_title}
             </Typography>
           }
         />
       </div>
       <ListItemIcon>
-        <IconButton onClick={() => !favorite && addToFavorite(id)}>
+        <IconButton onClick={() => !disabled && addToFavorite(id)}>
           {!favorite ? (
             <StarBorder className={classes.favoriteIcon} />
           ) : (

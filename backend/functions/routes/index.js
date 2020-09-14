@@ -1,6 +1,6 @@
 const axios = require("axios");
-const admin = require("firebase-admin");
 const db = require("../fbApp").db;
+const firebase = require("../fbApp").firebase;
 const {
   GENIUS_API_SEARCH_URL,
   GENIUS_API_SONGS_URL,
@@ -10,8 +10,15 @@ const {
 } = require("../constants");
 const { parseSearchResponse, extractLyricsFromJs } = require("../utils");
 
+const getUserFavorites = (uid) =>
+  db
+    .doc(`/users/${uid}`)
+    .get("favorites")
+    .then((userRef) => userRef.data().favorites);
+
 exports.handleSearch = (req, res) => {
   console.log(req.query);
+  console.log(req.user.uid);
   axios
     .get(GENIUS_API_SEARCH_URL, {
       params: {
@@ -19,8 +26,19 @@ exports.handleSearch = (req, res) => {
         access_token: ACCESS_TOKEN,
       },
     })
-    .then((response) => {
-      return res.status(200).json(parseSearchResponse(response.data));
+    .then(async (response) => {
+      const results = parseSearchResponse(response.data);
+      const favorites = await getUserFavorites(req.user.uid);
+
+      console.log("User favorites: ", favorites);
+
+      return res
+        .status(200)
+        .json(
+          results.map((result) =>
+            favorites[result.id] ? { ...result, favorite: true } : result
+          )
+        );
     })
     .catch((e) => {
       console.error(e.message);
@@ -35,18 +53,31 @@ exports.addToFavorites = async (req, res) => {
   console.log(user.uid, songId);
 
   const songDoc = await db.doc(`/songs/${songId}`).get();
+  const favorites = await getUserFavorites(user.uid);
+  const isAlreadyFavorite = favorites[songId];
+
   if (songDoc.exists) {
     console.log("Song exists");
     try {
-      const result = await db.doc(`users/${user.uid}`).update(
-        {
-          [`favorites.${songId}`]: true,
-        },
-        { merge: true }
-      );
-      console.log("Song added to favorites: ", result);
-      return res.status(200);
+      if (isAlreadyFavorite) {
+        delete favorites[songId];
+        await db.doc(`users/${user.uid}`).update({
+          favorites,
+        });
+        console.log("Song removed from favorites");
+      } else {
+        await db.doc(`users/${user.uid}`).update(
+          {
+            [`favorites.${songId}`]: true,
+          },
+          { merge: true }
+        );
+        console.log("Song added to favorites");
+      }
+
+      return res.status(200).json({ success: true });
     } catch (e) {
+      console.log(e.message);
       return res
         .status(500)
         .json({ message: ERROR_MESSAGES.SOMETHING_WENT_WRONG });
@@ -63,8 +94,8 @@ exports.addToFavorites = async (req, res) => {
         };
         db.doc(`/songs/${songId}`)
           .set(song)
-          .then(async (res) => {
-            console.log("Song added: ", res.data());
+          .then(async () => {
+            console.log("Song added");
 
             const result = await db.doc(`users/${user.uid}`).update(
               {
@@ -73,7 +104,7 @@ exports.addToFavorites = async (req, res) => {
               { merge: true }
             );
 
-            console.log("Song added to user: ", result);
+            console.log("Song added to favorites: ", result);
 
             return res.status(200).json({ success: true });
           })

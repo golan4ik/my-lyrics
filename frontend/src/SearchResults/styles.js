@@ -1,23 +1,20 @@
 import { makeStyles } from "@material-ui/core";
 import { orange } from "@material-ui/core/colors";
-import { findByLabelText } from "@testing-library/react";
 
 export const searchResultsStyles = makeStyles((theme) => ({
   root: {
-    width: "100%",
-    /* maxWidth: "36ch", */
-    minHeight: `calc(70vh - ${theme.spacing(3)}px)`,
-    maxHeight: `calc(70vh - ${theme.spacing(3)}px)`,
+    minHeight: `calc(70vh - ${theme.spacing(5)}px)`,
+    maxHeight: `calc(70vh - ${theme.spacing(5)}px)`,
     overflow: "auto",
     backgroundColor: theme.palette.background.paper,
     position: "relative",
   },
   overlay: {
-    position: "absolute",
+    /* position: "absolute",
     top: 0,
     left: 0,
     width: "100%",
-    height: "100%",
+    height: "100%", */
     color: theme.palette.primary.contrastText,
     zIndex: theme.zIndex.drawer + 1,
   },
@@ -32,23 +29,30 @@ export const resultCardStyles = makeStyles((theme) => ({
   },
   listItem: {
     flexWrap: "wrap",
+    cursor: "default",
+    "&.Mui-disabled": {
+      cursor: "wait",
+    },
+    "&.favorite": {
+      "background-color": "lightgoldenrodyellow",
+    },
   },
   lyricsPanel: {
     flexBasis: "100%",
   },
   lyricsContent: {
-    position: 'relative',
-    minHeight: '20vh',
-    maxHeight: '40vh',
-    overflow: 'hidden',
-    overflowY: 'auto',
-    '& a': {
-      all: 'unset'
-    }
+    position: "relative",
+    minHeight: "20vh",
+    maxHeight: "40vh",
+    overflow: "hidden",
+    overflowY: "auto",
+    "& a": {
+      all: "unset",
+    },
   },
   backDrop: {
-    position: 'absolute',
-    zIndex: 1
+    position: "absolute",
+    zIndex: 1,
   },
   accordionSummary: {
     height: 0,

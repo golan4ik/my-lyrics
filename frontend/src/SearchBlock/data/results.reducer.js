@@ -6,6 +6,10 @@ export const NAME = "SEARCH_RESULTS";
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case actions.UPDATE_SONG_DATA:
+      return state.map((song) => {
+        return song.id === action.id ? { ...song, ...action.data } : song;
+      });
     case actions.LYRICS_LOAD_START:
       return state.map((song) => {
         if (song.path === action.songPath) song.loadingLyrics = true;
