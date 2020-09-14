@@ -1,27 +1,48 @@
 import React from "react";
 import { connect } from "react-redux";
 import List from "@material-ui/core/List";
-import { getResults, getIsInProcess } from "../SearchBlock/data/selectors";
+import {
+  getResults,
+  getIsInProcess,
+  getError,
+} from "../SearchBlock/data/selectors";
 import ResultCard from "./ResultCard";
-import { Divider, Grid, Button } from "@material-ui/core";
+import { Divider, Grid, Button, Snackbar } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { loadMore, onLyricsLoadStart, onLyricsAddToFavorites } from "../SearchBlock/data/actions";
+import {
+  loadMore,
+  onLyricsLoadStart,
+  onLyricsAddToFavorites,
+} from "../SearchBlock/data/actions";
 import { searchResultsStyles } from "./styles";
 
 const SearchResults = (props) => {
   const classes = searchResultsStyles();
-  const { results, loadMore, isInProcess, getLyrics, addToFavorite } = props;
+  const {
+    error,
+    results,
+    loadMore,
+    isInProcess,
+    getLyrics,
+    addToFavorite,
+  } = props;
 
   //console.log(results);
 
   return (
-    <Grid justify="center" container item xs={12}>
+    <Grid item xs={12}>
       <List className={classes.root}>
         {isInProcess && (
           <Backdrop className={classes.overlay} open={true}>
             <CircularProgress color="inherit" />
           </Backdrop>
+        )}
+        {error && !isInProcess && (
+          <Snackbar open={true}>
+            <MuiAlert elevation={6} variant="filled" severity="error" />
+          </Snackbar>
         )}
         {results.map((result) => (
           <React.Fragment key={result.id}>
@@ -30,7 +51,7 @@ const SearchResults = (props) => {
               getLyrics={getLyrics}
               addToFavorite={addToFavorite}
             />
-            <Divider variant="inset" component="li" />
+            {/* <Divider variant="inset" component="li" /> */}
           </React.Fragment>
         ))}
       </List>
@@ -55,7 +76,9 @@ const mapStateToProps = (state) => {
   console.log(state);
   const results = getResults(state);
   const isInProcess = getIsInProcess(state);
+  const error = getError(state);
   return {
+    error,
     results,
     isInProcess,
   };

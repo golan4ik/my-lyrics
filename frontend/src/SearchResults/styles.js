@@ -1,23 +1,20 @@
 import { makeStyles } from "@material-ui/core";
 import { orange } from "@material-ui/core/colors";
-import { findByLabelText } from "@testing-library/react";
 
 export const searchResultsStyles = makeStyles((theme) => ({
   root: {
-    width: "100%",
-    /* maxWidth: "36ch", */
-    minHeight: `calc(70vh - ${theme.spacing(3)}px)`,
-    maxHeight: `calc(70vh - ${theme.spacing(3)}px)`,
+    minHeight: `calc(70vh - ${theme.spacing(5)}px)`,
+    maxHeight: `calc(70vh - ${theme.spacing(5)}px)`,
     overflow: "auto",
     backgroundColor: theme.palette.background.paper,
     position: "relative",
   },
   overlay: {
-    position: "absolute",
+    /* position: "absolute",
     top: 0,
     left: 0,
     width: "100%",
-    height: "100%",
+    height: "100%", */
     color: theme.palette.primary.contrastText,
     zIndex: theme.zIndex.drawer + 1,
   },

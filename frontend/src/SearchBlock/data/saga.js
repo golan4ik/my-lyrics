@@ -44,8 +44,8 @@ function* onSearchStart() {
     if (!error) {
       yield put(searchSuccess(results));
     } else {
-      localStorage.removeItem("user");
-      yield put(setUser(null));
+      /* localStorage.removeItem("user");
+      yield put(setUser(null)); */
       yield put(searchError(error));
     }
   } catch (e) {}

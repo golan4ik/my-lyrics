@@ -35,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.light,
     color: theme.palette.primary.contrastText,
     cursor: "pointer",
+    '& img': {
+      width: '80%',
+      height: '80%'
+    }
   },
   title: {
     flexGrow: 1,
@@ -97,9 +101,11 @@ const Navbar = ({ history, location, user, authInProcess, signOut }) => {
                   <Avatar
                     className={classes.userAvatar}
                     onClick={() => history.push("/favorites")}
-                  >
-                    {user[0] || "F"}
-                  </Avatar>
+                    variant="rounded"
+                    src={
+                      "https://www.iconsdb.com/icons/preview/white/music-2-xxl.png"
+                    }
+                  />
                 </Tooltip>
                 <IconButton
                   className={classes.logoutButton}
