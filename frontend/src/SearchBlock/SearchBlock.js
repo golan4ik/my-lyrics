@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { makeStyles, Grid, TextField } from "@material-ui/core";
 import { connect } from "react-redux";
 import { getTerm, getIsInProcess, getError } from "./data/selectors";
@@ -26,15 +26,11 @@ const SearchBlock = (props) => {
     }
   };
 
-  /* eslint-disable react-hooks/exhaustive-deps */
-  useEffect(() => {
-    searchStart();
-  }, []);
-
   return (
     <Grid container>
       <Grid className={classes.root} container item justify="center" xs={12}>
         <TextField
+          autoFocus
           label="Search"
           variant="outlined"
           size="small"
