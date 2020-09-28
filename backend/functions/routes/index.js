@@ -9,16 +9,22 @@ const {
   GENIUS_BASE_URL,
 } = require("../constants");
 const { parseSearchResponse, extractLyricsFromJs } = require("../utils");
+const { firestore } = require("firebase-admin");
 
 const getUserFavorites = (uid) =>
   db
-    .doc(`/users/${uid}`)
-    .get("favorites")
-    .then((userRef) => userRef.data().favorites);
+    .collection(`/users/${uid}/favorites`)
+    .get()
+    .then((favorites) =>
+      favorites.docs.map((doc) => {
+        return { songId: parseInt(doc.id), ...doc.data() };
+      })
+    );
 
 exports.handleSearch = (req, res) => {
   console.log(req.query);
   console.log(req.user.uid);
+  console.log(ACCESS_TOKEN);
   axios
     .get(GENIUS_API_SEARCH_URL, {
       params: {
@@ -36,7 +42,9 @@ exports.handleSearch = (req, res) => {
         .status(200)
         .json(
           results.map((result) =>
-            favorites[result.id] ? { ...result, favorite: true } : result
+            favorites.find((favorite) => favorite.songId === result.id)
+              ? { ...result, favorite: true }
+              : result
           )
         );
     })
@@ -54,24 +62,22 @@ exports.addToFavorites = async (req, res) => {
 
   const songDoc = await db.doc(`/songs/${songId}`).get();
   const favorites = await getUserFavorites(user.uid);
-  const isAlreadyFavorite = favorites[songId];
+  const isAlreadyFavorite = favorites.find(
+    (favorite) => favorite.songId === songId
+  );
 
   if (songDoc.exists) {
     console.log("Song exists");
     try {
       if (isAlreadyFavorite) {
-        delete favorites[songId];
-        await db.doc(`users/${user.uid}`).update({
-          favorites,
-        });
+        await db
+          .doc(`users/${user.uid}/favorites/${songId.toString()}`)
+          .delete();
         console.log("Song removed from favorites");
       } else {
-        await db.doc(`users/${user.uid}`).update(
-          {
-            [`favorites.${songId}`]: true,
-          },
-          { merge: true }
-        );
+        await db.doc(`users/${user.uid}/favorites/${songId.toString()}`).set({
+          addedAt: firestore.Timestamp.now(),
+        });
         console.log("Song added to favorites");
       }
 
