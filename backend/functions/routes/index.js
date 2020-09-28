@@ -1,4 +1,5 @@
 const axios = require("axios");
+const orderBy = require("lodash").orderBy;
 const db = require("../fbApp").db;
 const firebase = require("../fbApp").firebase;
 const {
@@ -21,6 +22,56 @@ const getUserFavorites = (uid) =>
       })
     );
 
+const getFavoriteSongsList = async (
+  uid,
+  sortBy = "addedAtMillis",
+  sortDirection = "desc",
+  withLyrics = true
+) => {
+  const favorites = await db
+    .collection(`/users/${uid}/favorites`)
+    .get()
+    .then((favorites) => {
+      const favsArray = favorites.docs.map((doc) => {
+        return {
+          songId: parseInt(doc.id),
+          ...doc.data(),
+          addedAtMillis: doc.data().addedAt.toMillis(),
+        };
+      });
+
+      const sortedArray = orderBy(favsArray, [sortBy], [sortDirection]);
+
+      //console.log(favsArray, sortedArray);
+
+      return sortedArray;
+    });
+
+  const songs = await db
+    .collection("songs")
+    .where(
+      "id",
+      "in",
+      Object.values(favorites).map((fav) => fav.songId)
+    )
+    .get()
+    .then((favs) => {
+      return favorites.map((favorite) => {
+        return favs.docs.find((doc) => doc.data().id === favorite.songId).data(); // TODO: assuming doc was found
+      });
+    });
+
+  //console.log(songs);
+
+  return songs;
+};
+
+exports.getFavoriteSongsList = async (req, res) => {
+  const songs = await getFavoriteSongsList(req.user.uid);
+
+  return res.status(200).json(songs);
+};
+
 exports.handleSearch = (req, res) => {
   console.log(req.query);
   console.log(req.user.uid);
@@ -36,7 +87,7 @@ exports.handleSearch = (req, res) => {
       const results = parseSearchResponse(response.data);
       const favorites = await getUserFavorites(req.user.uid);
 
-      console.log("User favorites: ", favorites);
+      //console.log("User favorites: ", await getFavoriteSongsList(req.user.uid));
 
       return res
         .status(200)
