@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid, TextField, makeStyles } from "@material-ui/core";
 import { useState } from "react";
+import { getIsLoading, getError, getFavorites } from "./data/selectors";
+import { connect } from "react-redux";
+import { loadFavorites } from "./data/actions";
+import ResultCard from "../SearchResults/ResultCard";
 
 const styles = makeStyles((theme) => {
   return {
@@ -10,14 +14,18 @@ const styles = makeStyles((theme) => {
   };
 });
 
-function Favorites() {
+function Favorites({ loadFavorites, results }) {
   const [term, setTerm] = useState("");
   const classes = styles();
 
+  useEffect(() => {
+    loadFavorites();
+  }, []);
+
   return (
-    <Grid justify="center" container xs={12} className={classes.root}>
+    <Grid justify="center" container item xs={12} className={classes.root}>
       <Grid container justify="center" item xs={12} sm={8} md={6} lg={4}>
-        <Grid item={12}>
+        <Grid item xs={12}>
           <TextField
             autoFocus
             label="Search"
@@ -31,11 +39,27 @@ function Favorites() {
           />
         </Grid>
         <Grid container item xs={12}>
-            
+          {results.map((result) => {
+            return <ResultCard key={result.id} {...result} />
+          })}
         </Grid>
       </Grid>
     </Grid>
   );
 }
 
-export default Favorites;
+const mapStateToProps = (state) => {
+  return {
+    loading: getIsLoading(state),
+    error: getError(state),
+    results: getFavorites(state),
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadFavorites: () => dispatch(loadFavorites()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Favorites);
