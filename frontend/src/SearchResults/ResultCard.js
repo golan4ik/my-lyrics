@@ -55,7 +55,6 @@ const ResultCard = (props) => {
           />
         </ListItemAvatar>
         <ListItemText
-          alignItems="center"
           primary={
             <Typography component="span" variant="body1" color="textPrimary">
               {full_title}

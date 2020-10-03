@@ -7,6 +7,7 @@ const SIGNUP_URL = "/signup";
 const LYRICS_URL = "/getLyrics";
 const ADD_TO_FAVORITES_URL = "/addToFavorites";
 const GET_FAVORITES_SONGS_LIST_URL = "/getFavoriteSongsList";
+const GET_FAVORITES_COUNT = "/getFavoritesCount";
 const MAX_PER_PAGE = 20;
 
 export const getSavedUserData = () => {
@@ -146,5 +147,14 @@ export const addToFavorites = (songId) => {
       return {
         message: e.message,
       };
+    });
+};
+
+export const getFavoritesCount = () => {
+  return axios
+    .post(GET_FAVORITES_COUNT)
+    .then((res) => res.data)
+    .catch((e) => {
+      return { message: e.message };
     });
 };

@@ -23,6 +23,7 @@ import {
   searchLyrics,
   getSongLyrics,
   addToFavorites,
+  getFavoritesCount,
 } from "../../utils/networking";
 import { getSongById } from "./results.selectors";
 
@@ -66,6 +67,8 @@ function* onAddToFavoritesSaga({ songId }) {
 
   if (success) {
     //console.log('Song added to favorites');
+    const count = yield call(getFavoritesCount);
+    console.log(count);
 
     // TODO: add validation here
 

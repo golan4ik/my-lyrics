@@ -1,9 +1,16 @@
 import React, { useEffect } from "react";
-import { Grid, TextField, makeStyles, List } from "@material-ui/core";
+import {
+  Grid,
+  TextField,
+  makeStyles,
+  List,
+  Backdrop,
+  CircularProgress,
+} from "@material-ui/core";
 import { useState } from "react";
 import { getIsLoading, getError, getFavorites } from "./data/selectors";
 import { connect } from "react-redux";
-import { loadFavorites } from "./data/actions";
+import { loadFavorites, removeFromFavorites } from "./data/actions";
 import ResultCard from "../SearchResults/ResultCard";
 import { searchResultsStyles } from "../SearchResults/styles";
 
@@ -12,10 +19,14 @@ const styles = makeStyles((theme) => {
     root: {
       marginTop: `${theme.spacing() * 2}px`,
     },
+    overlay: {
+      color: theme.palette.primary.contrastText,
+      zIndex: theme.zIndex.drawer + 1,
+    },
   };
 });
 
-function Favorites({ loadFavorites, results }) {
+function Favorites({ loadFavorites, results, removeFromFavorites, loading }) {
   const [term, setTerm] = useState("");
   const classes = styles();
   const listClasses = searchResultsStyles();
@@ -42,8 +53,19 @@ function Favorites({ loadFavorites, results }) {
         </Grid>
         <Grid container item xs={12}>
           <List className={listClasses.root}>
+            {loading && (
+              <Backdrop className={classes.overlay} open={true}>
+                <CircularProgress color="inherit" />
+              </Backdrop>
+            )}
             {results.map((result) => {
-              return <ResultCard key={result.id} {...result} />;
+              return (
+                <ResultCard
+                  key={result.id}
+                  {...result}
+                  addToFavorite={removeFromFavorites}
+                />
+              );
             })}
           </List>
         </Grid>
@@ -63,6 +85,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadFavorites: () => dispatch(loadFavorites()),
+    removeFromFavorites: (songId) => dispatch(removeFromFavorites(songId)),
   };
 };
 

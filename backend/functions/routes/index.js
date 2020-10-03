@@ -12,15 +12,16 @@ const {
 const { parseSearchResponse, extractLyricsFromJs } = require("../utils");
 const { firestore } = require("firebase-admin");
 
+const getFavoritesDocs = async (userId) => {
+  return await db.collection(`/users/${userId}/favorites`).get();
+};
+
 const getUserFavorites = (uid) =>
-  db
-    .collection(`/users/${uid}/favorites`)
-    .get()
-    .then((favorites) =>
-      favorites.docs.map((doc) => {
-        return { songId: parseInt(doc.id), ...doc.data() };
-      })
-    );
+  getFavoritesDocs(uid).then((favorites) =>
+    favorites.docs.map((doc) => {
+      return { songId: parseInt(doc.id), ...doc.data() };
+    })
+  );
 
 const getFavoriteSongsList = async (
   uid,
@@ -57,7 +58,10 @@ const getFavoriteSongsList = async (
     .get()
     .then((favs) => {
       return favorites.map((favorite) => {
-        return favs.docs.find((doc) => doc.data().id === favorite.songId).data(); // TODO: assuming doc was found
+        const songDoc = favs.docs
+          .find((doc) => doc.data().id === favorite.songId)
+          .data();
+        return { ...songDoc, favorite: true }; // TODO: assuming doc was found
       });
     });
 
@@ -224,4 +228,12 @@ exports.getLyrics = (req, res) => {
         .status(500)
         .json({ error: ERROR_MESSAGES.SOMETHING_WENT_WRONG });
     });
+};
+
+exports.getFavoritesCount = async (req, res) => {
+  const docs = (await getFavoritesDocs(req.user.uid)).docs;
+
+  return res
+    .status(200)
+    .json({ result: docs ? docs.map((doc) => doc.data()).length : docs.length });
 };

@@ -23,6 +23,7 @@ export default (state = initialState, action) => {
     case RESULTS_SET:
       return {
         ...state,
+        loading: false,
         results: [...action.results],
       };
     default:

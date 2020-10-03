@@ -2,6 +2,14 @@ export const LOADING_START = "FAVORITES/LOADING/START";
 export const LOADING_STOP = "FAVORITES/LOADING/START";
 export const LOAD = "FAVORITES/LOAD";
 export const RESULTS_SET = "FAVORITES/RESULTS/SET";
+export const FAVORITE_REMOVE = "FAVORITES/REMOVE";
+
+export const removeFromFavorites = (songId) => {
+  return {
+    type: FAVORITE_REMOVE,
+    songId,
+  };
+};
 
 export const loadFavorites = () => {
   return {
