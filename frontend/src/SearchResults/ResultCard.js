@@ -55,6 +55,7 @@ const ResultCard = (props) => {
           />
         </ListItemAvatar>
         <ListItemText
+          alignItems="center"
           primary={
             <Typography component="span" variant="body1" color="textPrimary">
               {full_title}
@@ -62,7 +63,7 @@ const ResultCard = (props) => {
           }
         />
       </div>
-      <ListItemIcon>
+      <ListItemIcon className={classes.favoriteButton}>
         <IconButton onClick={() => !disabled && addToFavorite(id)}>
           {!favorite ? (
             <StarBorder className={classes.favoriteIcon} />

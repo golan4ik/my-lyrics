@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
-import { Grid, TextField, makeStyles } from "@material-ui/core";
+import { Grid, TextField, makeStyles, List } from "@material-ui/core";
 import { useState } from "react";
 import { getIsLoading, getError, getFavorites } from "./data/selectors";
 import { connect } from "react-redux";
 import { loadFavorites } from "./data/actions";
 import ResultCard from "../SearchResults/ResultCard";
+import { searchResultsStyles } from "../SearchResults/styles";
 
 const styles = makeStyles((theme) => {
   return {
@@ -17,6 +18,7 @@ const styles = makeStyles((theme) => {
 function Favorites({ loadFavorites, results }) {
   const [term, setTerm] = useState("");
   const classes = styles();
+  const listClasses = searchResultsStyles();
 
   useEffect(() => {
     loadFavorites();
@@ -39,9 +41,11 @@ function Favorites({ loadFavorites, results }) {
           />
         </Grid>
         <Grid container item xs={12}>
-          {results.map((result) => {
-            return <ResultCard key={result.id} {...result} />
-          })}
+          <List className={listClasses.root}>
+            {results.map((result) => {
+              return <ResultCard key={result.id} {...result} />;
+            })}
+          </List>
         </Grid>
       </Grid>
     </Grid>

@@ -10,11 +10,6 @@ export const searchResultsStyles = makeStyles((theme) => ({
     position: "relative",
   },
   overlay: {
-    /* position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%", */
     color: theme.palette.primary.contrastText,
     zIndex: theme.zIndex.drawer + 1,
   },
@@ -62,11 +57,15 @@ export const resultCardStyles = makeStyles((theme) => ({
   dataBlock: {
     display: "flex",
     boxSizing: "border-box",
+    alignItems: 'center',
     flex: 1,
   },
   avatar: {
     borderRadius: 0,
   },
+  favoriteButton: {
+    marginTop: '0'
+  },  
   favoriteIcon: {
     color: orange[500],
     fontSize: theme.typography.fontSize * 2 + "px",
