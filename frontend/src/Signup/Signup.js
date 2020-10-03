@@ -43,7 +43,7 @@ const SignUp = ({ error, loading, signUp, user, history }) => {
     if(prevUser === null && user !== null){
       history.push('/');
     }
-  }, [user, prevUser]);
+  }, [user, prevUser, history]);
 
   const onSubmit = () => {
     const allValid = canSubmit();

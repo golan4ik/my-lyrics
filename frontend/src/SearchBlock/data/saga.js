@@ -14,10 +14,8 @@ import {
   incrementPage,
   setSearchProcess,
   ON_LYRICS_LOAD_START,
-  lyricsLoadStart,
   lyricsLoadSuccess,
   LYRICS_ADD_TO_FAVORITES_START,
-  onLyricsAddToFavorites,
   updateSongData,
 } from "./actions";
 import { getTerm, getPage } from "./selectors";
@@ -26,7 +24,6 @@ import {
   getSongLyrics,
   addToFavorites,
 } from "../../utils/networking";
-import { setUser } from "../../data/auth.actions";
 import { getSongById } from "./results.selectors";
 
 function* loadMore() {

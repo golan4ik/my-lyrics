@@ -59,7 +59,7 @@ const Navbar = ({ history, location, user, authInProcess, signOut }) => {
     if (prevUser !== null && user === null) {
       history.push("/signin");
     }
-  }, [user, prevUser]);
+  }, [user, prevUser, history]);
 
   return (
     <div className={classes.root}>

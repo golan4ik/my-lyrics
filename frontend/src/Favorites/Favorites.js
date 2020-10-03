@@ -20,7 +20,7 @@ function Favorites({ loadFavorites, results }) {
 
   useEffect(() => {
     loadFavorites();
-  }, []);
+  }, [loadFavorites]);
 
   return (
     <Grid justify="center" container item xs={12} className={classes.root}>
