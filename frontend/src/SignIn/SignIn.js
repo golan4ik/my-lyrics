@@ -74,7 +74,7 @@ const SignIn = ({ error, loading, signIn, history, user }) => {
         <Typography component="h3" variant="h5" className={classes.title}>
           Sign In
         </Typography>
-        <Grid container item xs={12} justify="center">
+        <Grid container item xs={12} justify="center" direction="column">
           <AuthFormControl
             id="email"
             label="Email"

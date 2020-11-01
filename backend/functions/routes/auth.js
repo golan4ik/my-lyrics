@@ -52,7 +52,7 @@ router.post("/signup", (req, res) => {
       return db.doc(`/users/${newUserCredentials.id}`).set(newUserCredentials);
     })
     .then(() => {
-      return user.getIdToken();
+      return jwt.sign(user.toJSON(), process.env.TOKEN_SALT);
     })
     .then((token) => {
       res.status(200).json({ token });

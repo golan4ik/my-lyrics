@@ -21,14 +21,19 @@ function* signInStartSaga({ credentials }) {
     yield put(signInError(message));
   }
 }
-function* signUpStartSaga({credentials}) {
+function* signUpStartSaga({ credentials }) {
   yield put(onSignUpStart());
-  const { token, userName, message } = yield call(signUp, credentials);
+  const { token, message } = yield call(signUp, credentials);
 
-  if (!message) {
-    localStorage.setItem("user", JSON.stringify({ token, userName }));
-    yield put(setUser(userName));
+
+  if (!message && token) {
+    localStorage.setItem(
+      "user",
+      JSON.stringify({ token, userName: credentials.userName })
+    );
+    yield put(setUser(credentials.userName));
   } else {
+    localStorage.removeItem("user");
     yield put(signInError(message));
   }
 }

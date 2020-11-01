@@ -56,7 +56,7 @@ const Navbar = ({ history, location, user, authInProcess, signOut }) => {
   const prevUser = usePrevious(user);
 
   useEffect(() => {
-    if (prevUser !== null && user === null) {
+    if (!prevUser && user === null && location.pathname !== "/signup") {
       history.push("/signin");
     }
   }, [user, prevUser, history]);

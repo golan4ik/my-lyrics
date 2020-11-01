@@ -40,7 +40,8 @@ const SignUp = ({ error, loading, signUp, user, history }) => {
   const prevUser = usePrevious(user);
 
   useEffect(() => {
-    if(prevUser === null && user !== null){
+    console.log(prevUser, user);
+    if(!prevUser && user !== null){
       history.push('/');
     }
   }, [user, prevUser, history]);
@@ -77,7 +78,7 @@ const SignUp = ({ error, loading, signUp, user, history }) => {
         <Typography component="h3" variant="h5" className={classes.title}>
           Sign Up
         </Typography>
-        <Grid container item xs={12} justify="center">
+        <Grid container item xs={12} justify="center" direction="column">
           <AuthFormControl
             id="userName"
             label="User Name"

@@ -30,6 +30,13 @@ function Favorites({ loadFavorites, results, removeFromFavorites, loading }) {
   const [term, setTerm] = useState("");
   const classes = styles();
   const listClasses = searchResultsStyles();
+/* 
+  let lol = 'lol';
+  function fn(){
+    console.log(lol);
+    let lol = 'lol2';
+  }
+  fn(); */
 
   useEffect(() => {
     loadFavorites();
