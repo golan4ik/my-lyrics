@@ -48,6 +48,10 @@ const getFavoriteSongsList = async (
       return sortedArray;
     });
 
+  if (favorites.length === 0) {
+    return [];
+  }
+
   const songs = await db
     .collection("songs")
     .where(
@@ -70,10 +74,16 @@ const getFavoriteSongsList = async (
   return songs;
 };
 
-exports.getFavoriteSongsList = async (req, res) => {
-  const songs = await getFavoriteSongsList(req.user.uid);
-
-  return res.status(200).json(songs);
+exports.getFavoriteSongsList = (req, res) => {
+  getFavoriteSongsList(req.user.uid)
+    .then((songs) => {
+      return res.status(200).json(songs);
+    })
+    .catch((error) => {
+      return res
+        .status(500)
+        .json({ message: ERROR_MESSAGES.SOMETHING_WENT_WRONG });
+    });
 };
 
 exports.handleSearch = (req, res) => {
@@ -233,7 +243,7 @@ exports.getLyrics = (req, res) => {
 exports.getFavoritesCount = async (req, res) => {
   const docs = (await getFavoritesDocs(req.user.uid)).docs;
 
-  return res
-    .status(200)
-    .json({ result: docs ? docs.map((doc) => doc.data()).length : docs.length });
+  return res.status(200).json({
+    result: docs ? docs.map((doc) => doc.data()).length : docs.length,
+  });
 };

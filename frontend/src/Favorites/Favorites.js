@@ -45,7 +45,7 @@ function Favorites({ loadFavorites, results, removeFromFavorites, loading }) {
   return (
     <Grid justify="center" container item xs={12} className={classes.root}>
       <Grid container justify="center" item xs={12} sm={8} md={6} lg={4}>
-        <Grid item xs={12}>
+        <Grid container item xs={12} justify="center">
           <TextField
             autoFocus
             label="Search"
