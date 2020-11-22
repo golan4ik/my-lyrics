@@ -9,11 +9,14 @@ const styles = makeStyles((theme) => {
     root: {
       marginTop: `${theme.spacing() * 2}px`,
     },
+    searchField: {
+      flex: 1,
+    },
   };
 });
 
 const SearchBlock = (props) => {
-  const { term, inProcess, searchStart, updateTerm } = props;
+  const { term, inProcess, onSearchStart, updateTerm } = props;
   const classes = styles();
 
   const onChange = (e) => {
@@ -22,16 +25,18 @@ const SearchBlock = (props) => {
 
   const onKeyUp = (e) => {
     if (e.keyCode === 13) {
-      searchStart();
+      onSearchStart();
     }
   };
 
   return (
-    <Grid container>
+    <Grid container item xs={12}>
       <Grid className={classes.root} container item justify="center" xs={12}>
         <TextField
           autoFocus
+          className={classes.searchField}
           label="Search"
+          placeholder="Type song or artist name"
           variant="outlined"
           size="small"
           onKeyUp={onKeyUp}
@@ -56,7 +61,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateTerm: (term) => dispatch(updateTerm(term)),
-    searchStart: () => dispatch(searchStart()),
+    onSearchStart: () => dispatch(searchStart()),
   };
 };
 

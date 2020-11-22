@@ -73,7 +73,6 @@ const SearchResults = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  console.log(state);
   const results = getResults(state);
   const isInProcess = getIsInProcess(state);
   const error = getError(state);

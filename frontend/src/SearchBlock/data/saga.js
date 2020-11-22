@@ -53,8 +53,6 @@ function* onLyricsLoadStartSaga({ songPath, songId }) {
   yield put(updateSongData(songId, { disabled: true }));
   const { lyrics, error } = yield call(getSongLyrics, songPath, songId);
 
-  error && console.log(error);
-
   yield put(lyricsLoadSuccess(songPath, lyrics));
   yield put(updateSongData(songId, { disabled: false }));
 }
@@ -67,8 +65,7 @@ function* onAddToFavoritesSaga({ songId }) {
 
   if (success) {
     //console.log('Song added to favorites');
-    const count = yield call(getFavoritesCount);
-    console.log(count);
+    //const count = yield call(getFavoritesCount);
 
     // TODO: add validation here
 

@@ -40,7 +40,6 @@ const SignUp = ({ error, loading, signUp, user, history }) => {
   const prevUser = usePrevious(user);
 
   useEffect(() => {
-    console.log(prevUser, user);
     if(!prevUser && user !== null){
       history.push('/');
     }
@@ -48,8 +47,8 @@ const SignUp = ({ error, loading, signUp, user, history }) => {
 
   const onSubmit = () => {
     const allValid = canSubmit();
-    console.log(fields);
-    console.log(allValid);
+    /* console.log(fields);
+    console.log(allValid); */
 
     signUp(fields);
   };

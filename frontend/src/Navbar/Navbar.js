@@ -32,9 +32,10 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.error.main,
     marginLeft: theme.spacing(1),
   },
-  userAvatar: {
+  favoritesIcon: {
     backgroundColor: theme.palette.primary.light,
     color: theme.palette.primary.contrastText,
+    marginRight: theme.spacing(3),
     cursor: "pointer",
     "& img": {
       width: "80%",
@@ -100,7 +101,7 @@ const Navbar = ({ history, location, user, authInProcess, signOut }) => {
               <>
                 <Tooltip title={"My favorites"} aria-label="My favorites">
                   <Avatar
-                    className={classes.userAvatar}
+                    className={classes.favoritesIcon}
                     onClick={() => history.push("/favorites")}
                     variant="rounded"
                     src={AvatarImg}

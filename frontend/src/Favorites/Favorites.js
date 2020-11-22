@@ -23,10 +23,19 @@ const styles = makeStyles((theme) => {
       color: theme.palette.primary.contrastText,
       zIndex: theme.zIndex.drawer + 1,
     },
+    searchField: {
+      flex: 1
+    }
   };
 });
 
-function Favorites({ loadFavorites, results, removeFromFavorites, loading }) {
+function Favorites({
+  loadFavorites,
+  results,
+  removeFromFavorites,
+  loading,
+  onSearchStart,
+}) {
   const [term, setTerm] = useState("");
   const classes = styles();
   const listClasses = searchResultsStyles();
@@ -35,16 +44,23 @@ function Favorites({ loadFavorites, results, removeFromFavorites, loading }) {
     loadFavorites();
   }, [loadFavorites]);
 
+  const onKeyUp = (e) => {
+    /* if (e.keyCode === 13) {
+      onSearchStart();
+    } */
+  };
+
   return (
     <Grid justify="center" container item xs={12} className={classes.root}>
       <Grid container justify="center" item xs={12} sm={8} md={6} lg={4}>
         <Grid container item xs={12} justify="center">
           <TextField
             autoFocus
+            className={classes.searchField}
             label="Search"
             variant="outlined"
             size="small"
-            onKeyUp={() => {}}
+            onKeyUp={onKeyUp}
             onChange={(evt) => {
               setTerm(evt.target.value);
             }}
@@ -60,15 +76,22 @@ function Favorites({ loadFavorites, results, removeFromFavorites, loading }) {
                 <CircularProgress color="inherit" />
               </Backdrop>
             )}
-            {results.map((result) => {
-              return (
-                <ResultCard
-                  key={result.id}
-                  {...result}
-                  addToFavorite={removeFromFavorites}
-                />
-              );
-            })}
+            {results
+              .filter((result) => {
+                return result.full_title
+                  .toLowerCase()
+                  .includes(term.toLowerCase());
+              })
+              .map((result) => {
+                return (
+                  <ResultCard
+                    key={result.id}
+                    highlightFavorite={false}
+                    {...result}
+                    addToFavorite={removeFromFavorites}
+                  />
+                );
+              })}
           </List>
         </Grid>
       </Grid>

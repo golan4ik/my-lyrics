@@ -18,7 +18,6 @@ export const NAME = "AUTH";
 export default (state = initialState, action) => {
   switch (action.type) {
     case SET_USER:
-      console.log(action);
       return {
         loading: false,
         error: null,

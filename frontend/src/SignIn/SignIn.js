@@ -45,8 +45,8 @@ const SignIn = ({ error, loading, signIn, history, user }) => {
 
   const onSubmit = () => {
     const allValid = canSubmit();
-    console.log(fields);
-    console.log(allValid);
+   /*  console.log(fields);
+    console.log(allValid); */
 
     signIn(fields);
   };
