@@ -41,12 +41,12 @@ const SignIn = ({ error, loading, signIn, history, user }) => {
     if(prevUser === null && user !== null){
       history.push('/');
     }
-  }, [user, prevUser]);
+  }, [user, prevUser, history]);
 
   const onSubmit = () => {
     const allValid = canSubmit();
-    console.log(fields);
-    console.log(allValid);
+   /*  console.log(fields);
+    console.log(allValid); */
 
     signIn(fields);
   };
@@ -74,7 +74,7 @@ const SignIn = ({ error, loading, signIn, history, user }) => {
         <Typography component="h3" variant="h5" className={classes.title}>
           Sign In
         </Typography>
-        <Grid container item xs={12} justify="center">
+        <Grid container item xs={12} justify="center" direction="column">
           <AuthFormControl
             id="email"
             label="Email"

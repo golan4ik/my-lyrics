@@ -2,7 +2,7 @@ import * as actions from "./actions";
 
 const defaultState = {
   isInprocess: false,
-  term: "Godzilla",
+  term: "",
   error: null,
   page: 1,
 };

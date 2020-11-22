@@ -40,15 +40,15 @@ const SignUp = ({ error, loading, signUp, user, history }) => {
   const prevUser = usePrevious(user);
 
   useEffect(() => {
-    if(prevUser === null && user !== null){
+    if(!prevUser && user !== null){
       history.push('/');
     }
-  }, [user, prevUser]);
+  }, [user, prevUser, history]);
 
   const onSubmit = () => {
     const allValid = canSubmit();
-    console.log(fields);
-    console.log(allValid);
+    /* console.log(fields);
+    console.log(allValid); */
 
     signUp(fields);
   };
@@ -77,7 +77,7 @@ const SignUp = ({ error, loading, signUp, user, history }) => {
         <Typography component="h3" variant="h5" className={classes.title}>
           Sign Up
         </Typography>
-        <Grid container item xs={12} justify="center">
+        <Grid container item xs={12} justify="center" direction="column">
           <AuthFormControl
             id="userName"
             label="User Name"

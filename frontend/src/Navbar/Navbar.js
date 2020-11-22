@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import { Tooltip, Grid } from "@material-ui/core";
 import { setUser } from "../data/auth.actions";
 import { usePrevious } from "../common/hooks";
+import AvatarImg from "./music-2-xxl.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,10 +32,15 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.error.main,
     marginLeft: theme.spacing(1),
   },
-  userAvatar: {
+  favoritesIcon: {
     backgroundColor: theme.palette.primary.light,
     color: theme.palette.primary.contrastText,
+    marginRight: theme.spacing(3),
     cursor: "pointer",
+    "& img": {
+      width: "80%",
+      height: "80%",
+    },
   },
   title: {
     flexGrow: 1,
@@ -52,10 +58,10 @@ const Navbar = ({ history, location, user, authInProcess, signOut }) => {
   const prevUser = usePrevious(user);
 
   useEffect(() => {
-    if (prevUser !== null && user === null) {
+    if (!prevUser && user === null && location.pathname !== "/signup") {
       history.push("/signin");
     }
-  }, [user, prevUser]);
+  }, [user, prevUser, history]);
 
   return (
     <div className={classes.root}>
@@ -95,11 +101,11 @@ const Navbar = ({ history, location, user, authInProcess, signOut }) => {
               <>
                 <Tooltip title={"My favorites"} aria-label="My favorites">
                   <Avatar
-                    className={classes.userAvatar}
+                    className={classes.favoritesIcon}
                     onClick={() => history.push("/favorites")}
-                  >
-                    {user[0] || "F"}
-                  </Avatar>
+                    variant="rounded"
+                    src={AvatarImg}
+                  />
                 </Tooltip>
                 <IconButton
                   className={classes.logoutButton}

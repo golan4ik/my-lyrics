@@ -12,25 +12,22 @@ const useStyles = makeStyles((theme) => ({
 const Main = (props) => {
   const classes = useStyles();
 
-  console.log("Main");
-
   return (
     <Grid container sx={12} alignItems="stretch">
-      <Grid container item sx={12} direction="column">
-        <Grid container item justify="center" className={classes.root}>
-          <Grid
-            container
-            item
-            xs={12}
-            justify="center"
-            alignContent="flex-start"
-          >
-            <Grid item xs={12} md={8}>
-              <SearchBlock />
-            </Grid>
-            <Grid item xs={12} md={8}>
-              <SearchResults />
-            </Grid>
+      <Grid container item justify="center" className={classes.root}>
+        <Grid
+          container
+          item
+          xs={12}
+          direction="column"
+          justify="center"
+          alignContent="center"
+        >
+          <Grid container item xs={12} sm={8} md={6} lg={4}>
+            <SearchBlock />
+          </Grid>
+          <Grid container item xs={12} sm={8} md={6} lg={4}>
+            <SearchResults />
           </Grid>
         </Grid>
       </Grid>

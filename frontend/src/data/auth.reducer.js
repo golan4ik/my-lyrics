@@ -8,7 +8,7 @@ import {
 } from "./auth.actions";
 
 const initialState = {
-  user: getSavedUserData().userName,
+  user: getSavedUserData().userName || null,
   loading: false,
   error: null,
 };
@@ -18,9 +18,6 @@ export const NAME = "AUTH";
 export default (state = initialState, action) => {
   switch (action.type) {
     case SET_USER:
-      if (!action.user) {
-        localStorage.removeItem("user");
-      }
       return {
         loading: false,
         error: null,

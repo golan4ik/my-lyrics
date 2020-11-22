@@ -5,10 +5,14 @@ import searchReducer, {
 import searchResultsReducer, {
   NAME as SEARCH_RESULTS_NAME,
 } from "../SearchBlock/data/results.reducer";
+import favoritesReducer, {
+  NAME as FAVORITES_NAME,
+} from "../Favorites/data/reducer";
 import authReducer, { NAME as AUTH_NAME } from "../data/auth.reducer";
 
 export default combineReducers({
   [SEARCH_NAME]: searchReducer,
   [SEARCH_RESULTS_NAME]: searchResultsReducer,
   [AUTH_NAME]: authReducer,
+  [FAVORITES_NAME]: favoritesReducer,
 });
