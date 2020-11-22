@@ -17,7 +17,7 @@ export const getSavedUserData = () => {
   try {
     user = JSON.parse(userItem);
 
-    console.log(user);
+    //console.log(user);
 
     return user || {};
   } catch (e) {

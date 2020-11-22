@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import { Tooltip, Grid } from "@material-ui/core";
 import { setUser } from "../data/auth.actions";
 import { usePrevious } from "../common/hooks";
+import AvatarImg from "./music-2-xxl.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,10 +36,10 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.light,
     color: theme.palette.primary.contrastText,
     cursor: "pointer",
-    '& img': {
-      width: '80%',
-      height: '80%'
-    }
+    "& img": {
+      width: "80%",
+      height: "80%",
+    },
   },
   title: {
     flexGrow: 1,
@@ -102,9 +103,7 @@ const Navbar = ({ history, location, user, authInProcess, signOut }) => {
                     className={classes.userAvatar}
                     onClick={() => history.push("/favorites")}
                     variant="rounded"
-                    src={
-                      "https://www.iconsdb.com/icons/preview/white/music-2-xxl.png"
-                    }
+                    src={AvatarImg}
                   />
                 </Tooltip>
                 <IconButton

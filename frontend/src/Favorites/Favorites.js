@@ -30,13 +30,6 @@ function Favorites({ loadFavorites, results, removeFromFavorites, loading }) {
   const [term, setTerm] = useState("");
   const classes = styles();
   const listClasses = searchResultsStyles();
-/* 
-  let lol = 'lol';
-  function fn(){
-    console.log(lol);
-    let lol = 'lol2';
-  }
-  fn(); */
 
   useEffect(() => {
     loadFavorites();
@@ -52,13 +45,15 @@ function Favorites({ loadFavorites, results, removeFromFavorites, loading }) {
             variant="outlined"
             size="small"
             onKeyUp={() => {}}
-            onChange={() => {}}
+            onChange={(evt) => {
+              setTerm(evt.target.value);
+            }}
             value={term}
             focus="true"
             disabled={false}
           />
         </Grid>
-        <Grid container item xs={12}>
+        <Grid container item xs={12} justify="center">
           <List className={listClasses.root}>
             {loading && (
               <Backdrop className={classes.overlay} open={true}>
