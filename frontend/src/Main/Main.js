@@ -23,10 +23,10 @@ const Main = (props) => {
           justify="center"
           alignContent="center"
         >
-          <Grid item xs={12} sm={8} md={6} lg={4}>
+          <Grid container item xs={12} sm={8} md={6} lg={4}>
             <SearchBlock />
           </Grid>
-          <Grid item xs={12} sm={8} md={6} lg={4}>
+          <Grid container item xs={12} sm={8} md={6} lg={4}>
             <SearchResults />
           </Grid>
         </Grid>

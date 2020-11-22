@@ -11,7 +11,7 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps)(
   ({ component: Component, isAuthenticated, ...props }) => {
-    console.log(isAuthenticated);
+    //console.log(isAuthenticated, Component, props);
 
     return isAuthenticated ? (
       <Route component={Component} {...props} />

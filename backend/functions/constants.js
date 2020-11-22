@@ -1,5 +1,6 @@
-exports.ACCESS_TOKEN =
-  "5KuZO8ZTJuI9xOs3JjvyRCd-xHGgzky59j35-lSRnZm5M8Ep4Gha2NTj5bIyeY-6";
+require("dotenv");
+
+exports.ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 exports.GENIUS_BASE_URL = "http://genius.com";
 exports.GENIUS_API_SEARCH_URL = "http://api.genius.com/search";
 exports.GENIUS_API_SONGS_URL = "http://api.genius.com/songs";

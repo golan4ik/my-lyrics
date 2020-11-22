@@ -1,4 +1,5 @@
 const axios = require("axios");
+const orderBy = require("lodash").orderBy;
 const db = require("../fbApp").db;
 const firebase = require("../fbApp").firebase;
 const {
@@ -9,16 +10,86 @@ const {
   GENIUS_BASE_URL,
 } = require("../constants");
 const { parseSearchResponse, extractLyricsFromJs } = require("../utils");
+const { firestore } = require("firebase-admin");
+
+const getFavoritesDocs = async (userId) => {
+  return await db.collection(`/users/${userId}/favorites`).get();
+};
 
 const getUserFavorites = (uid) =>
-  db
-    .doc(`/users/${uid}`)
-    .get("favorites")
-    .then((userRef) => userRef.data().favorites);
+  getFavoritesDocs(uid).then((favorites) =>
+    favorites.docs.map((doc) => {
+      return { songId: parseInt(doc.id), ...doc.data() };
+    })
+  );
+
+const getFavoriteSongsList = async (
+  uid,
+  sortBy = "addedAtMillis",
+  sortDirection = "desc",
+  withLyrics = true
+) => {
+  const favorites = await db
+    .collection(`/users/${uid}/favorites`)
+    .get()
+    .then((favorites) => {
+      const favsArray = favorites.docs.map((doc) => {
+        return {
+          songId: parseInt(doc.id),
+          ...doc.data(),
+          addedAtMillis: doc.data().addedAt.toMillis(),
+        };
+      });
+
+      const sortedArray = orderBy(favsArray, [sortBy], [sortDirection]);
+
+      //console.log(favsArray, sortedArray);
+
+      return sortedArray;
+    });
+
+  if (favorites.length === 0) {
+    return [];
+  }
+
+  const songs = await db
+    .collection("songs")
+    .where(
+      "id",
+      "in",
+      Object.values(favorites).map((fav) => fav.songId)
+    )
+    .get()
+    .then((favs) => {
+      return favorites.map((favorite) => {
+        const songDoc = favs.docs
+          .find((doc) => doc.data().id === favorite.songId)
+          .data();
+        return { ...songDoc, favorite: true }; // TODO: assuming doc was found
+      });
+    });
+
+  //console.log(songs);
+
+  return songs;
+};
+
+exports.getFavoriteSongsList = (req, res) => {
+  getFavoriteSongsList(req.user.uid)
+    .then((songs) => {
+      return res.status(200).json(songs);
+    })
+    .catch((error) => {
+      return res
+        .status(500)
+        .json({ message: ERROR_MESSAGES.SOMETHING_WENT_WRONG });
+    });
+};
 
 exports.handleSearch = (req, res) => {
   console.log(req.query);
   console.log(req.user.uid);
+  console.log(ACCESS_TOKEN);
   axios
     .get(GENIUS_API_SEARCH_URL, {
       params: {
@@ -30,13 +101,15 @@ exports.handleSearch = (req, res) => {
       const results = parseSearchResponse(response.data);
       const favorites = await getUserFavorites(req.user.uid);
 
-      console.log("User favorites: ", favorites);
+      //console.log("User favorites: ", await getFavoriteSongsList(req.user.uid));
 
       return res
         .status(200)
         .json(
           results.map((result) =>
-            favorites[result.id] ? { ...result, favorite: true } : result
+            favorites.find((favorite) => favorite.songId === result.id)
+              ? { ...result, favorite: true }
+              : result
           )
         );
     })
@@ -54,24 +127,22 @@ exports.addToFavorites = async (req, res) => {
 
   const songDoc = await db.doc(`/songs/${songId}`).get();
   const favorites = await getUserFavorites(user.uid);
-  const isAlreadyFavorite = favorites[songId];
+  const isAlreadyFavorite = favorites.find(
+    (favorite) => favorite.songId === songId
+  );
 
   if (songDoc.exists) {
     console.log("Song exists");
     try {
       if (isAlreadyFavorite) {
-        delete favorites[songId];
-        await db.doc(`users/${user.uid}`).update({
-          favorites,
-        });
+        await db
+          .doc(`users/${user.uid}/favorites/${songId.toString()}`)
+          .delete();
         console.log("Song removed from favorites");
       } else {
-        await db.doc(`users/${user.uid}`).update(
-          {
-            [`favorites.${songId}`]: true,
-          },
-          { merge: true }
-        );
+        await db.doc(`users/${user.uid}/favorites/${songId.toString()}`).set({
+          addedAt: firestore.Timestamp.now(),
+        });
         console.log("Song added to favorites");
       }
 
@@ -167,4 +238,12 @@ exports.getLyrics = (req, res) => {
         .status(500)
         .json({ error: ERROR_MESSAGES.SOMETHING_WENT_WRONG });
     });
+};
+
+exports.getFavoritesCount = async (req, res) => {
+  const docs = (await getFavoritesDocs(req.user.uid)).docs;
+
+  return res.status(200).json({
+    result: docs ? docs.map((doc) => doc.data()).length : docs.length,
+  });
 };

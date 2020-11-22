@@ -7,7 +7,7 @@ import {
   getError,
 } from "../SearchBlock/data/selectors";
 import ResultCard from "./ResultCard";
-import { Divider, Grid, Button, Snackbar } from "@material-ui/core";
+import { Grid, Button, Snackbar } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -73,7 +73,6 @@ const SearchResults = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  console.log(state);
   const results = getResults(state);
   const isInProcess = getIsInProcess(state);
   const error = getError(state);

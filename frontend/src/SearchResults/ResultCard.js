@@ -30,6 +30,7 @@ const ResultCard = (props) => {
     id,
     lyrics,
     addToFavorite,
+    highlightFavorite = true,
   } = props;
 
   const [showLyrics, setShowLyrics] = useState(false);
@@ -43,7 +44,9 @@ const ResultCard = (props) => {
   return (
     <ListItem
       alignItems="flex-start"
-      className={`${classes.listItem} ${favorite ? 'favorite': ''}`}
+      className={`${classes.listItem} ${
+        favorite && highlightFavorite ? "favorite" : ""
+      }`}
       disabled={!!disabled}
     >
       <div className={classes.dataBlock} onClick={getLyrics}>
@@ -62,7 +65,7 @@ const ResultCard = (props) => {
           }
         />
       </div>
-      <ListItemIcon>
+      <ListItemIcon className={classes.favoriteButton}>
         <IconButton onClick={() => !disabled && addToFavorite(id)}>
           {!favorite ? (
             <StarBorder className={classes.favoriteIcon} />

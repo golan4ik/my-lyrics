@@ -6,6 +6,8 @@ const SIGNIN_URL = "/signin";
 const SIGNUP_URL = "/signup";
 const LYRICS_URL = "/getLyrics";
 const ADD_TO_FAVORITES_URL = "/addToFavorites";
+const GET_FAVORITES_SONGS_LIST_URL = "/getFavoriteSongsList";
+const GET_FAVORITES_COUNT = "/getFavoritesCount";
 const MAX_PER_PAGE = 20;
 
 export const getSavedUserData = () => {
@@ -15,7 +17,7 @@ export const getSavedUserData = () => {
   try {
     user = JSON.parse(userItem);
 
-    console.log(user);
+    //console.log(user);
 
     return user || {};
   } catch (e) {
@@ -35,7 +37,28 @@ export const useIsAuthenticated = () => {
   return [isAuthenticated];
 };
 
+export const getFavoriteSongsList = () => {
+  return axios
+    .post(GET_FAVORITES_SONGS_LIST_URL, {
+      params: {},
+    })
+    .then((res) => {
+      if (res.status === 401) return { error: res.data, status: res.status };
+
+      return { results: res.data };
+    })
+    .catch((e) => {
+      return {
+        error: {
+          message: e.message,
+          status: e.response.status,
+        },
+      };
+    });
+};
+
 export const searchLyrics = (q, page = 1) => {
+  getFavoriteSongsList();
   return axios
     .get(SEARCH_URL, {
       params: {
@@ -111,7 +134,7 @@ export const getSongLyrics = (songPath, songId) => {
     });
 };
 
-export const addToFavorites = (songId) => { 
+export const addToFavorites = (songId) => {
   return axios
     .post(ADD_TO_FAVORITES_URL, {
       songId,
@@ -124,5 +147,14 @@ export const addToFavorites = (songId) => {
       return {
         message: e.message,
       };
+    });
+};
+
+export const getFavoritesCount = () => {
+  return axios
+    .post(GET_FAVORITES_COUNT)
+    .then((res) => res.data)
+    .catch((e) => {
+      return { message: e.message };
     });
 };

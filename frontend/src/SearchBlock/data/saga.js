@@ -14,10 +14,8 @@ import {
   incrementPage,
   setSearchProcess,
   ON_LYRICS_LOAD_START,
-  lyricsLoadStart,
   lyricsLoadSuccess,
   LYRICS_ADD_TO_FAVORITES_START,
-  onLyricsAddToFavorites,
   updateSongData,
 } from "./actions";
 import { getTerm, getPage } from "./selectors";
@@ -25,8 +23,8 @@ import {
   searchLyrics,
   getSongLyrics,
   addToFavorites,
+  getFavoritesCount,
 } from "../../utils/networking";
-import { setUser } from "../../data/auth.actions";
 import { getSongById } from "./results.selectors";
 
 function* loadMore() {
@@ -55,8 +53,6 @@ function* onLyricsLoadStartSaga({ songPath, songId }) {
   yield put(updateSongData(songId, { disabled: true }));
   const { lyrics, error } = yield call(getSongLyrics, songPath, songId);
 
-  error && console.log(error);
-
   yield put(lyricsLoadSuccess(songPath, lyrics));
   yield put(updateSongData(songId, { disabled: false }));
 }
@@ -69,6 +65,7 @@ function* onAddToFavoritesSaga({ songId }) {
 
   if (success) {
     //console.log('Song added to favorites');
+    //const count = yield call(getFavoritesCount);
 
     // TODO: add validation here
 
